@@ -1,0 +1,4897 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ClipForge is an affordable short-form content distribution agency for Indian creators. We clip, edit, and distribute your best moments across Instagram Reels, YouTube Shorts, and Facebook Reels.">
+  <meta name="theme-color" content="#0a0a0c">
+  <title>ClipForge — Short-Form Content Distribution Agency</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 36 36'%3E%3Crect width='36' height='36' rx='8' fill='%23c93820'/%3E%3Ctext x='50%25' y='54%25' dominant-baseline='middle' text-anchor='middle' fill='%23ffffff' font-family='system-ui,sans-serif' font-weight='700' font-size='15'%3ECF%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@500;600;700&display=swap">
+  <style>
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --ink: #0a0a0c;
+      --ink-surface: #141418;
+      --ink-surface-hover: #1c1c23;
+      --paper: #f5f0eb;
+      --paper-alt: #ece7e0;
+      --card-bg: #eae4dc;
+      --card-hover: #e1dad0;
+      --ember: #e8432a;
+      --ember-fill: #c93820;
+      --ember-fill-hover: #ad2d18;
+      --ember-text: #b8301a;
+      --ember-dark: #ff7a63;
+      --amber: #f0a500;
+      --slate: #2b2a27;
+      --muted: #57524b;
+      --border: #d4cec5;
+      --border-strong: #b9b1a5;
+      --border-dark: rgba(245, 240, 235, 0.14);
+      --paper-muted: rgba(245, 240, 235, 0.8);
+      --paper-subtle: rgba(245, 240, 235, 0.68);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+      --font-display: 'Space Grotesk', system-ui, -apple-system, sans-serif;
+      --font-body: 'Inter', system-ui, -apple-system, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+      color-scheme: light;
+    }
+
+    html {
+      overflow-x: clip;
+      scrollbar-width: thin;
+      scrollbar-color: var(--ember-fill) var(--ink);
+    }
+
+    @media (prefers-reduced-motion: no-preference) {
+      html {
+        scroll-behavior: smooth;
+      }
+    }
+
+    body {
+      font-family: var(--font-body);
+      background: var(--paper);
+      color: var(--ink);
+      caret-color: var(--ember-fill);
+      overflow-x: clip;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    ::selection {
+      background: var(--ember-fill);
+      color: #ffffff;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--ember-text);
+      outline-offset: 3px;
+    }
+
+    .hero :focus-visible,
+    .nav:not(.scrolled) :focus-visible,
+    .kinetic-band :focus-visible,
+    .services-ledger :focus-visible,
+    .how-section :focus-visible,
+    .pricing-card.featured :focus-visible,
+    .distribution-section :focus-visible,
+    .clipper-cta-card :focus-visible,
+    .cta-section :focus-visible,
+    .footer :focus-visible {
+      outline-color: var(--amber);
+    }
+
+    /* View Transitions Polish */
+    ::view-transition-old(stage-canvas),
+    ::view-transition-new(stage-canvas) {
+      animation-duration: 0.36s;
+      animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    ::view-transition-old(intake-body),
+    ::view-transition-new(intake-body) {
+      animation-duration: 0.25s;
+      animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Skip Link */
+    .skip-link {
+      position: fixed;
+      top: -100px;
+      left: 16px;
+      z-index: 10002;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--font-display);
+      font-size: 0.875rem;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: top 0.2s var(--ease-out-expo);
+    }
+
+    .skip-link:focus {
+      top: 16px;
+    }
+
+    /* Custom Cutting-Room Cursor */
+    .cursor-dot,
+    .cursor-ring {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 10000;
+      opacity: 0;
+      transition: opacity 0.2s ease;
+    }
+
+    .cursor-dot {
+      width: 7px;
+      height: 7px;
+      background: var(--ember);
+      border-radius: 50%;
+    }
+
+    .cursor-ring {
+      width: 36px;
+      height: 36px;
+      border: 1.5px solid rgba(232, 67, 42, 0.65);
+      border-radius: 50%;
+      transition: width 0.24s var(--ease-out-expo), height 0.24s var(--ease-out-expo), border-color 0.22s ease, background-color 0.22s ease, opacity 0.2s ease;
+    }
+
+    .cursor-ring.hovering {
+      width: 56px;
+      height: 56px;
+      border-color: var(--amber);
+      background: rgba(240, 165, 0, 0.08);
+    }
+
+    .cursor-visible .cursor-dot,
+    .cursor-visible .cursor-ring {
+      opacity: 1;
+    }
+
+    @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+      .cursor-dot,
+      .cursor-ring {
+        display: none !important;
+      }
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 7px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--ink);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--ember-fill);
+      border-radius: 4px;
+    }
+
+    /* Scroll Progress Bar */
+    .scroll-progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--ember);
+      z-index: 10001;
+      transform-origin: left center;
+      transform: scaleX(0);
+      pointer-events: none;
+    }
+
+    @supports (animation-timeline: scroll()) {
+      @media (prefers-reduced-motion: no-preference) {
+        .scroll-progress {
+          animation: scrollBarProgress linear both;
+          animation-timeline: scroll(root);
+        }
+      }
+    }
+
+    @keyframes scrollBarProgress {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    /* Navigation: Adaptive over Dark Cinema Hero -> Frosted Light Paper */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(245, 240, 235, 0.08);
+      background: rgba(10, 10, 12, 0.35);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: background-color 0.35s var(--ease-out-expo), padding 0.35s var(--ease-out-expo), border-color 0.35s var(--ease-out-expo);
+    }
+
+    .nav.scrolled {
+      background: rgba(245, 240, 235, 0.94);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      padding: 13px 40px;
+      border-bottom-color: var(--border);
+    }
+
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.48rem;
+      font-weight: 700;
+      color: #ffffff;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      letter-spacing: -0.025em;
+      transition: color 0.25s ease;
+    }
+
+    .nav.scrolled .nav-logo {
+      color: var(--ink);
+    }
+
+    .nav-logo .logo-mark {
+      width: 36px;
+      height: 36px;
+      background: var(--ember-fill);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #ffffff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      transform: rotate(-3deg);
+      transition: transform 0.3s var(--ease-out-expo);
+    }
+
+    .nav-logo:hover .logo-mark {
+      transform: rotate(3deg) scale(1.06);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--paper-muted);
+      text-decoration: none;
+      position: relative;
+      transition: color 0.25s ease;
+      white-space: nowrap;
+    }
+
+    .nav.scrolled .nav-links a:not(.nav-cta) {
+      color: var(--slate);
+    }
+
+    .nav-links a:not(.nav-cta)::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--ember);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.3s var(--ease-out-expo);
+    }
+
+    .nav-links a:hover {
+      color: #ffffff;
+    }
+
+    .nav.scrolled .nav-links a:not(.nav-cta):hover {
+      color: var(--ink);
+    }
+
+    .nav-links a:not(.nav-cta):hover::after {
+      transform: scaleX(1);
+    }
+
+    .nav-cta {
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--ink) !important;
+      background: var(--paper);
+      padding: 10px 22px;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      transition: background-color 0.25s ease, color 0.25s ease, transform 0.25s var(--ease-out-expo);
+    }
+
+    .nav.scrolled .nav-cta {
+      background: var(--ink);
+      color: #ffffff !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--amber) !important;
+      color: var(--ink) !important;
+      transform: translateY(-1px);
+    }
+
+    .nav.scrolled .nav-cta:hover {
+      background: var(--ember-fill) !important;
+      color: #ffffff !important;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 1002;
+      background: none;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      width: 44px;
+      height: 44px;
+      padding: 8px;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .hamburger:hover {
+      background: rgba(245, 240, 235, 0.1);
+    }
+
+    .nav.scrolled .hamburger:hover {
+      background: var(--card-bg);
+    }
+
+    .hamburger span {
+      width: 22px;
+      height: 2px;
+      background: #ffffff;
+      transition: transform 0.3s var(--ease-out-expo), opacity 0.2s ease, background-color 0.25s ease;
+      display: block;
+      transform-origin: center;
+    }
+
+    .nav.scrolled .hamburger span,
+    .hamburger.active span {
+      background: var(--ink);
+    }
+
+    .hamburger.active span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+
+    .hamburger.active span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger.active span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
+    }
+
+    .mobile-menu {
+      position: fixed;
+      inset: 0;
+      background: var(--ink);
+      z-index: 1001;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 22px;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity 0.28s var(--ease-out-expo), visibility 0.28s ease;
+    }
+
+    .mobile-menu.active {
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+
+    .mobile-menu a {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--paper);
+      text-decoration: none;
+      padding: 6px 16px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.16s ease, transform 0.16s var(--ease-out-expo), color 0.2s ease;
+    }
+
+    .mobile-menu.active a {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.3s var(--ease-out-expo), transform 0.3s var(--ease-out-expo), color 0.2s ease;
+    }
+
+    .mobile-menu.active a:nth-child(1) { transition-delay: 25ms, 25ms, 0ms; }
+    .mobile-menu.active a:nth-child(2) { transition-delay: 50ms, 50ms, 0ms; }
+    .mobile-menu.active a:nth-child(3) { transition-delay: 75ms, 75ms, 0ms; }
+    .mobile-menu.active a:nth-child(4) { transition-delay: 100ms, 100ms, 0ms; }
+    .mobile-menu.active a:nth-child(5) { transition-delay: 125ms, 125ms, 0ms; }
+    .mobile-menu.active a:nth-child(6) { transition-delay: 150ms, 150ms, 0ms; }
+    .mobile-menu.active a:nth-child(7) { transition-delay: 165ms, 165ms, 0ms; }
+
+    .mobile-menu a:hover {
+      color: var(--amber);
+    }
+
+    @media (max-width: 1040px) {
+      .nav-links { gap: 20px; }
+      .nav { padding: 16px 28px; }
+      .nav.scrolled { padding: 12px 28px; }
+    }
+
+    @media (max-width: 900px) {
+      .nav-links { display: none; }
+      .hamburger { display: flex; }
+      .nav { padding: 14px 20px; }
+      .nav.scrolled { padding: 11px 20px; }
+    }
+
+    /* Section Structure */
+    section[id] {
+      scroll-margin-top: 84px;
+    }
+
+    .band {
+      overflow-x: clip;
+    }
+
+    .section {
+      padding: 112px 40px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    @media (max-width: 768px) {
+      .section {
+        padding: 76px 20px;
+      }
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.1rem, 4.4vw, 3.5rem);
+      font-weight: 700;
+      line-height: 1.07;
+      color: var(--ink);
+      letter-spacing: -0.03em;
+      margin-bottom: 18px;
+      text-wrap: balance;
+    }
+
+    .section-subtitle {
+      font-size: 1.06rem;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 58ch;
+      text-wrap: pretty;
+    }
+
+    /* Dark Cinema Hero with Interactive WebGL2 GLSL Shader & Multi-Depth Parallax Stage */
+    .hero {
+      min-height: min(100svh, 920px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+      padding: 114px 0 80px;
+      background: radial-gradient(circle at 76% 32%, rgba(201, 56, 32, 0.24) 0%, rgba(10, 10, 12, 0.96) 58%), var(--ink);
+      color: var(--paper);
+      overflow: clip;
+    }
+
+    .hero-shader {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+      display: block;
+    }
+
+    .hero-vignette {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 80% at 24% 48%, rgba(10, 10, 12, 0.62) 0%, transparent 72%),
+        linear-gradient(180deg, rgba(10, 10, 12, 0.45) 0%, rgba(10, 10, 12, 0.12) 45%, rgba(10, 10, 12, 0.88) 100%);
+    }
+
+    .hero-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 40px;
+      width: 100%;
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+      gap: 56px;
+      align-items: center;
+    }
+
+    .hero-content {
+      transform: translate3d(0, calc(var(--hero-p, 0) * -48px), 0);
+      will-change: transform;
+    }
+
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.55rem, 5.5vw, 4.95rem);
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -0.03em;
+      color: #ffffff;
+      margin-bottom: 24px;
+      max-width: 15.5ch;
+      text-wrap: balance;
+    }
+
+    .word-mask {
+      display: inline-block;
+      overflow: hidden;
+      vertical-align: bottom;
+      padding-bottom: 0.06em;
+      margin-bottom: -0.06em;
+    }
+
+    .word-slide {
+      display: inline-block;
+      animation: wordRise 0.62s var(--ease-out-expo) both;
+      animation-delay: calc(var(--wi, 0) * 42ms);
+    }
+
+    @keyframes wordRise {
+      from { transform: translateY(104%); }
+      to { transform: translateY(0%); }
+    }
+
+    .hero h1 .highlight {
+      color: var(--ember-dark);
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero h1 .highlight::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0.05em;
+      height: 3px;
+      background: var(--ember);
+      border-radius: 2px;
+      transform-origin: left;
+      animation: highlightRule 0.72s 0.25s var(--ease-out-expo) both;
+    }
+
+    @keyframes highlightRule {
+      from { transform: scaleX(0); }
+      to { transform: scaleX(1); }
+    }
+
+    .nowrap {
+      white-space: nowrap;
+    }
+
+    .hero-desc {
+      font-size: clamp(1rem, 1.38vw, 1.14rem);
+      color: var(--paper-muted);
+      line-height: 1.7;
+      max-width: 52ch;
+      margin-bottom: 34px;
+      text-wrap: pretty;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .magnetic-wrap {
+      display: inline-block;
+      transition: transform 0.28s var(--ease-out-expo);
+      will-change: transform;
+    }
+
+    .btn-primary {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #ffffff;
+      background: var(--ember-fill);
+      padding: 15px 30px;
+      min-height: 50px;
+      border-radius: 10px;
+      border: 1.5px solid var(--ember-fill);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.22s ease, border-color 0.22s ease, transform 0.25s var(--ease-out-expo), box-shadow 0.25s var(--ease-out-expo);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-primary:hover {
+      background: var(--ember-fill-hover);
+      border-color: var(--ember);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 28px rgba(232, 67, 42, 0.34);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+      transition-duration: 0.1s;
+    }
+
+    .btn-secondary-hero {
+      font-family: var(--font-display);
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--paper);
+      background: rgba(245, 240, 235, 0.06);
+      padding: 15px 30px;
+      min-height: 50px;
+      border-radius: 10px;
+      border: 1.5px solid rgba(245, 240, 235, 0.26);
+      cursor: pointer;
+      text-decoration: none;
+      transition: background-color 0.22s ease, border-color 0.22s ease, color 0.22s ease, transform 0.25s var(--ease-out-expo);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-secondary-hero:hover {
+      background: var(--paper);
+      border-color: var(--paper);
+      color: var(--ink);
+      transform: translateY(-2px);
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 44px;
+      margin-top: 46px;
+      padding-top: 28px;
+      border-top: 1px solid var(--border-dark);
+      max-width: 620px;
+    }
+
+    .hero-stat-value {
+      font-family: var(--font-display);
+      font-size: 2rem;
+      font-weight: 700;
+      color: #ffffff;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+    }
+
+    .hero-stat-label {
+      font-size: 0.85rem;
+      color: var(--paper-subtle);
+      margin-top: 4px;
+    }
+
+    /* Hero Multi-Plane 3D Parallax Cutting Stage (180px differential depth spread) */
+    .cutting-stage {
+      width: 100%;
+      max-width: 492px;
+      justify-self: end;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      perspective: 1200px;
+    }
+
+    .stage-plane {
+      transform:
+        translate3d(calc(var(--hero-p, 0) * var(--plane-x, 0px)), calc(var(--hero-p, 0) * var(--plane-y, 0px)), 0)
+        rotateX(calc(var(--hero-p, 0) * var(--plane-rx, 0deg)))
+        scale(calc(1 + var(--hero-p, 0) * var(--plane-scale, 0)));
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .stage-plane-timeline {
+      --plane-y: -115px;
+      --plane-x: 10px;
+      --plane-rx: 8deg;
+      --plane-scale: -0.04;
+      background: rgba(20, 20, 24, 0.92);
+      color: var(--paper);
+      border-radius: var(--radius-md);
+      padding: 20px 22px 22px;
+      border: 1px solid rgba(245, 240, 235, 0.18);
+      backdrop-filter: blur(12px);
+    }
+
+    .stage-bar-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 14px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .stage-bar-label {
+      color: var(--paper-muted);
+    }
+
+    .stage-bar-ratio {
+      color: var(--amber);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stage-track-wrap {
+      position: relative;
+      height: 30px;
+      display: flex;
+      align-items: center;
+    }
+
+    .stage-track-bg {
+      width: 100%;
+      height: 12px;
+      border-radius: 3px;
+      background: rgba(245, 240, 235, 0.14);
+      position: relative;
+    }
+
+    .stage-clip {
+      position: absolute;
+      top: -3px;
+      height: 18px;
+      border-radius: 3px;
+    }
+
+    .stage-clip-1 { left: 12%; width: 14%; background: var(--ember); }
+    .stage-clip-2 { left: 43%; width: 14%; background: var(--amber); }
+    .stage-clip-3 { left: 74%; width: 14%; background: var(--ember); }
+
+    /* Percentage-exact GPU travel track: 16% -> 81% center of Clip 3 on every screen width */
+    .stage-playhead-rail {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      animation: stagePlayheadRail 0.85s 0.12s var(--ease-out-expo) both;
+    }
+
+    .stage-playhead {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 16%;
+      width: 2px;
+      background: #ffffff;
+    }
+
+    .stage-playhead::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      width: 8px;
+      height: 8px;
+      background: var(--amber);
+      transform: translateX(-50%) rotate(45deg);
+    }
+
+    @keyframes stagePlayheadRail {
+      from { transform: translateX(0%); }
+      to { transform: translateX(65%); }
+    }
+
+    .stage-plane-fan {
+      --plane-y: -48px;
+      --plane-x: 0px;
+      --plane-rx: 4deg;
+      --plane-scale: 0.04;
+      background: rgba(20, 20, 24, 0.78);
+      border: 1px solid rgba(245, 240, 235, 0.14);
+      border-radius: var(--radius-md);
+      padding: 12px 16px 14px;
+    }
+
+    .stage-plane-fan svg {
+      width: 100%;
+      height: auto;
+      display: block;
+      overflow: visible;
+    }
+
+    .forge-arc {
+      stroke-dasharray: 180;
+      animation: forgeDraw 0.72s var(--ease-out-expo) both;
+    }
+
+    .forge-arc-1 { animation-delay: 0.16s; }
+    .forge-arc-2 { animation-delay: 0.26s; }
+    .forge-arc-3 { animation-delay: 0.36s; }
+
+    .forge-node {
+      transform-box: fill-box;
+      transform-origin: center;
+      animation: forgeNodePop 0.4s var(--ease-out-expo) both;
+    }
+
+    .forge-node-1 { animation-delay: 0.46s; }
+    .forge-node-2 { animation-delay: 0.54s; }
+    .forge-node-3 { animation-delay: 0.62s; }
+
+    .forge-pulse {
+      stroke-dasharray: 22 158;
+      animation: forgePulse 2.4s linear infinite;
+    }
+
+    .forge-pulse-2 { animation-delay: -0.8s; }
+    .forge-pulse-3 { animation-delay: -1.6s; }
+
+    .hero.is-offscreen .forge-pulse,
+    body.is-tab-hidden .forge-pulse {
+      animation-play-state: paused;
+    }
+
+    .stage-plane-summary {
+      --plane-y: 68px;
+      --plane-x: -10px;
+      --plane-rx: -6deg;
+      --plane-scale: 0.05;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: var(--paper);
+      color: var(--ink);
+      border-radius: var(--radius-md);
+      padding: 14px 6px;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-variant-numeric: tabular-nums;
+      text-align: center;
+    }
+
+    .stage-summary-item strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1.08rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    .stage-summary-item span {
+      color: var(--muted);
+    }
+
+    @keyframes forgeDraw {
+      from { stroke-dashoffset: 180; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes forgeNodePop {
+      from { transform: scale(0.86); }
+      to { transform: scale(1); }
+    }
+
+    @keyframes forgePulse {
+      from { stroke-dashoffset: 180; }
+      to { stroke-dashoffset: 0; }
+    }
+
+    @media (max-width: 1080px) {
+      .hero-inner {
+        padding: 0 28px;
+        gap: 36px;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .hero {
+        min-height: auto;
+        padding: 102px 0 64px;
+      }
+
+      .hero-inner {
+        padding: 0 20px;
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .hero h1 {
+        max-width: 100%;
+      }
+
+      .hero-actions .btn-primary,
+      .hero-actions .btn-secondary-hero,
+      .hero-actions .magnetic-wrap {
+        width: 100%;
+      }
+
+      .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+        margin-top: 36px;
+        padding-top: 24px;
+      }
+
+      .hero-stat-value { font-size: 1.55rem; }
+      .hero-stat-label { font-size: 0.78rem; }
+
+      .cutting-stage {
+        justify-self: center;
+        max-width: 420px;
+      }
+    }
+
+    /* Scroll-Driven Velocity-Reactive Oversized Kinetic Wall */
+    .kinetic-band {
+      background: var(--ink-surface);
+      border-top: 1px solid var(--border-dark);
+      border-bottom: 1px solid var(--border-dark);
+      padding: 38px 0;
+      overflow-x: clip;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .kinetic-row {
+      display: flex;
+      align-items: center;
+      width: max-content;
+      white-space: nowrap;
+      will-change: transform;
+    }
+
+    .kinetic-row-primary {
+      margin-left: -12vw;
+      transform: translate3d(calc(var(--band-p, 0.5) * -280px + 100px), 0, 0) skewX(calc(var(--scroll-vel, 0) * -6deg));
+    }
+
+    .kinetic-row-secondary {
+      margin-left: -24vw;
+      transform: translate3d(calc(var(--band-p, 0.5) * 280px - 140px), 0, 0) skewX(calc(var(--scroll-vel, 0) * 6deg));
+    }
+
+    .kinetic-token {
+      font-family: var(--font-display);
+      font-size: clamp(1.45rem, 3.1vw, 2.55rem);
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: var(--paper);
+      padding: 0 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .kinetic-row-secondary .kinetic-token {
+      font-family: var(--font-mono);
+      font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--paper-muted);
+    }
+
+    .kinetic-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--ember);
+      flex-shrink: 0;
+    }
+
+    .kinetic-row-secondary .kinetic-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--amber);
+    }
+
+    /* Problem Section: Sticky Editorial Manifesto + Deep Parallax Ruled Planks */
+    .problem-section {
+      background: var(--paper);
+      overflow-x: clip;
+    }
+
+    .problem-split {
+      display: grid;
+      grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+      gap: 72px;
+      align-items: start;
+    }
+
+    .problem-sticky {
+      position: sticky;
+      top: 112px;
+    }
+
+    .problem-summary-strip {
+      margin-top: 32px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--muted);
+      letter-spacing: 0.03em;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+    }
+
+    .problem-planks {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .problem-plank {
+      background: var(--paper-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 34px 36px;
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 22px;
+      align-items: start;
+      transition: border-color 0.28s ease, background-color 0.28s ease;
+    }
+
+    .problem-plank:nth-child(even) {
+      margin-left: 44px;
+    }
+
+    .problem-plank:hover {
+      background: var(--card-bg);
+      border-color: var(--ember-fill);
+    }
+
+    .plank-index {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--ember-text);
+      line-height: 1.1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .problem-plank h3 {
+      font-family: var(--font-display);
+      font-size: 1.32rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+
+    .problem-plank p {
+      font-size: 0.96rem;
+      color: var(--muted);
+      line-height: 1.68;
+      text-wrap: pretty;
+    }
+
+    @media (max-width: 920px) {
+      .problem-split {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+
+      .problem-sticky {
+        position: static;
+      }
+
+      .problem-plank:nth-child(even) {
+        margin-left: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .problem-plank {
+        padding: 24px 20px;
+        grid-template-columns: 36px 1fr;
+        gap: 14px;
+      }
+    }
+
+    /* Services Section: 3D Stepped Parallax Pillars + Specular Cursor Light + Dark Horizon Ledger */
+    .services-section {
+      background: var(--paper-alt);
+      overflow-x: clip;
+    }
+
+    .services-pillars {
+      display: grid;
+      grid-template-columns: 1.24fr 1fr 1fr;
+      gap: 24px;
+      margin-top: 52px;
+      align-items: stretch;
+      perspective: 1200px;
+    }
+
+    .pillar-card {
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 36px 30px;
+      background: var(--paper);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      transform: translate3d(0, calc((var(--vp-p, 0.5) - 0.5) * var(--col-drift, 0px)), 0) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+      transition: background-color 0.25s ease, border-color 0.25s ease;
+      will-change: transform;
+    }
+
+    .pillar-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(280px circle at var(--mx, 50%) var(--my, 50%), rgba(232, 67, 42, 0.14), transparent 72%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+
+    .pillar-card:hover::before {
+      opacity: 1;
+    }
+
+    .pillar-card:hover {
+      background: var(--card-bg);
+      border-color: var(--ember-fill);
+    }
+
+    .pillar-card.pillar-lead {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: var(--paper);
+    }
+
+    .pillar-card.pillar-lead::before {
+      background: radial-gradient(320px circle at var(--mx, 50%) var(--my, 50%), rgba(240, 165, 0, 0.18), transparent 72%);
+    }
+
+    .pillar-card.pillar-lead:hover {
+      background: var(--ink-surface);
+      border-color: var(--ember);
+    }
+
+    .pillar-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 28px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .service-icon {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ember-text);
+      flex-shrink: 0;
+    }
+
+    .pillar-lead .service-icon {
+      color: var(--amber);
+    }
+
+    .pillar-phase {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .pillar-lead .pillar-phase {
+      color: var(--paper-muted);
+    }
+
+    .pillar-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pillar-lead h3 {
+      color: #ffffff;
+    }
+
+    .pillar-card p {
+      font-size: 0.94rem;
+      color: var(--muted);
+      line-height: 1.62;
+      text-wrap: pretty;
+      position: relative;
+      z-index: 1;
+    }
+
+    .pillar-lead p {
+      color: var(--paper-muted);
+    }
+
+    @media (min-width: 960px) {
+      .pillar-parallax-a { --col-drift: -84px; }
+      .pillar-parallax-b { --col-drift: -156px; }
+      .pillar-parallax-c { --col-drift: -228px; }
+    }
+
+    .services-ledger {
+      margin-top: 40px;
+      background: var(--ink);
+      border-radius: var(--radius-lg);
+      padding: 14px 36px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      column-gap: 48px;
+    }
+
+    .ledger-row {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--border-dark);
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+      transition: border-color 0.25s ease, transform 0.3s var(--ease-out-expo);
+    }
+
+    .ledger-row:nth-last-child(-n+2) {
+      border-bottom: none;
+    }
+
+    .ledger-row:hover {
+      border-bottom-color: var(--ember);
+      transform: translateX(6px);
+    }
+
+    .ledger-icon {
+      width: 24px;
+      height: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--amber);
+      flex-shrink: 0;
+      margin-top: 3px;
+    }
+
+    .ledger-row h3 {
+      font-family: var(--font-display);
+      font-size: 1.24rem;
+      font-weight: 600;
+      color: #ffffff;
+      margin-bottom: 6px;
+      letter-spacing: -0.015em;
+    }
+
+    .ledger-row p {
+      font-size: 0.92rem;
+      color: var(--paper-muted);
+      line-height: 1.6;
+      text-wrap: pretty;
+    }
+
+    @media (max-width: 920px) {
+      .services-pillars {
+        grid-template-columns: 1fr;
+        margin-top: 36px;
+      }
+
+      .pillar-card {
+        transform: none;
+      }
+
+      .services-ledger {
+        grid-template-columns: 1fr;
+        padding: 10px 24px;
+      }
+
+      .ledger-row:nth-last-child(-n+2) {
+        border-bottom: 1px solid var(--border-dark);
+      }
+
+      .ledger-row:last-child {
+        border-bottom: none;
+      }
+    }
+
+    /* CENTERPIECE: Full-Viewport 320vh Pinned Cinema Cutting-Room Stage */
+    .how-section {
+      background: var(--ink);
+      color: var(--paper);
+      position: relative;
+      overflow-x: clip;
+    }
+
+    .how-runway {
+      min-height: 310vh;
+      position: relative;
+    }
+
+    .how-pinned {
+      position: sticky;
+      top: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 88px 40px 44px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    .how-pinned-inner {
+      width: 100%;
+    }
+
+    .how-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 28px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+
+    .how-section .section-title {
+      color: #ffffff;
+      margin-bottom: 10px;
+    }
+
+    .how-section .section-subtitle {
+      color: var(--paper-muted);
+    }
+
+    .how-timecode-readout {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-variant-numeric: tabular-nums;
+      color: var(--amber);
+      background: var(--ink-surface);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-sm);
+      padding: 10px 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      white-space: nowrap;
+    }
+
+    .how-stage-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+      gap: 48px;
+      align-items: center;
+    }
+
+    .how-steps {
+      position: relative;
+      padding-left: 28px;
+    }
+
+    .how-rail {
+      position: absolute;
+      left: 0;
+      top: 12px;
+      bottom: 12px;
+      width: 2px;
+      background: var(--border-dark);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .how-rail-fill {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: var(--ember);
+      transform-origin: top center;
+      transform: scaleY(var(--scrub-p, 0.25));
+    }
+
+    .how-step {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border-dark);
+    }
+
+    .how-step:first-of-type {
+      padding-top: 4px;
+    }
+
+    .how-step:last-child {
+      border-bottom: none;
+      padding-bottom: 4px;
+    }
+
+    .how-step-trigger {
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 0;
+      text-align: left;
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 56px 1fr;
+      gap: 18px;
+      align-items: start;
+      color: inherit;
+    }
+
+    .step-number {
+      font-family: var(--font-display);
+      font-size: 1.95rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: rgba(245, 240, 235, 0.36);
+      line-height: 1;
+      transition: color 0.25s ease, transform 0.3s var(--ease-out-expo);
+    }
+
+    .how-step.is-active .step-number,
+    .how-step:hover .step-number {
+      color: var(--ember-dark);
+    }
+
+    .how-step.is-current .step-number {
+      color: var(--amber);
+      transform: translateX(6px);
+    }
+
+    .step-content h3 {
+      font-family: var(--font-display);
+      font-size: 1.24rem;
+      font-weight: 600;
+      color: rgba(245, 240, 235, 0.65);
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+      transition: color 0.22s ease;
+    }
+
+    .how-step.is-current .step-content h3,
+    .how-step-trigger:hover .step-content h3 {
+      color: #ffffff;
+    }
+
+    .step-content p {
+      font-size: 0.9rem;
+      color: rgba(245, 240, 235, 0.56);
+      line-height: 1.6;
+      text-wrap: pretty;
+      transition: color 0.22s ease;
+    }
+
+    .how-step.is-current .step-content p {
+      color: var(--paper-muted);
+    }
+
+    /* Cinema Cutting-Room Monitor */
+    .cutting-monitor {
+      background: var(--ink-surface);
+      color: var(--paper);
+      border-radius: var(--radius-lg);
+      padding: 28px 30px 26px;
+      border: 1px solid var(--border-dark);
+      overflow: hidden;
+      transform: perspective(1200px) rotateY(calc((var(--stage-local-p, 0.5) - 0.5) * -4deg));
+    }
+
+    .monitor-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border-dark);
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .monitor-stage-name {
+      color: var(--amber);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      font-weight: 500;
+    }
+
+    .monitor-stage-counter {
+      color: var(--paper-muted);
+    }
+
+    .monitor-viewport {
+      position: relative;
+      min-height: 312px;
+      padding: 26px 0 22px;
+      view-transition-name: stage-canvas;
+    }
+
+    .monitor-scene {
+      display: none;
+    }
+
+    .cutting-monitor[data-stage="1"] .monitor-scene-1,
+    .cutting-monitor[data-stage="2"] .monitor-scene-2,
+    .cutting-monitor[data-stage="3"] .monitor-scene-3,
+    .cutting-monitor[data-stage="4"] .monitor-scene-4 {
+      display: block;
+    }
+
+    .scene-title {
+      font-family: var(--font-display);
+      font-size: 1.42rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .scene-caption {
+      font-size: 0.92rem;
+      color: var(--paper-muted);
+      margin-bottom: 24px;
+      max-width: 48ch;
+    }
+
+    /* Scene 1: Scroll-reactive waveform & moving playhead */
+    .scene-intake-bar {
+      position: relative;
+      background: rgba(10, 10, 12, 0.72);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-md);
+      padding: 22px 20px;
+      overflow: hidden;
+    }
+
+    .intake-scrub-needle {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 2px;
+      background: var(--amber);
+      transform: translate3d(calc(var(--scene-p, 0.35) * 440px), 0, 0);
+      pointer-events: none;
+    }
+
+    .intake-wave {
+      display: grid;
+      grid-template-columns: repeat(24, 1fr);
+      gap: 4px;
+      align-items: end;
+      height: 80px;
+      margin-bottom: 14px;
+    }
+
+    .intake-wave span {
+      display: block;
+      background: rgba(245, 240, 235, 0.24);
+      border-radius: 2px;
+      height: var(--h, 40%);
+      transform-origin: bottom center;
+      transform: scaleY(calc(0.65 + var(--scene-p, 0.5) * 0.45));
+    }
+
+    .intake-wave span.is-hot { background: var(--ember); }
+    .intake-wave span.is-gold { background: var(--amber); }
+
+    .scene-meta-row {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.74rem;
+      color: var(--paper-muted);
+    }
+
+    /* Scene 2: Scrubbed 9:16 Slice Fan-Out */
+    .scene-slices {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      perspective: 900px;
+    }
+
+    .slice-card {
+      background: rgba(10, 10, 12, 0.72);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-sm);
+      padding: 16px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 140px;
+      transform-origin: bottom center;
+    }
+
+    .slice-card-1 {
+      transform: translate3d(0, calc((1 - var(--scene-p, 1)) * 26px), 0) rotate(calc((1 - var(--scene-p, 1)) * -8deg));
+    }
+
+    .slice-card-2 {
+      border-color: var(--ember);
+      transform: translate3d(0, calc((1 - var(--scene-p, 1)) * -14px), 0) scale(calc(0.92 + var(--scene-p, 1) * 0.08));
+    }
+
+    .slice-card-3 {
+      transform: translate3d(0, calc((1 - var(--scene-p, 1)) * 26px), 0) rotate(calc((1 - var(--scene-p, 1)) * 8deg));
+    }
+
+    .slice-badge {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--amber);
+      letter-spacing: 0.05em;
+    }
+
+    .slice-tracks {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-top: 20px;
+    }
+
+    .slice-bar {
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(245, 240, 235, 0.16);
+      transform-origin: left center;
+      transform: scaleX(calc(0.45 + var(--scene-p, 1) * 0.55));
+    }
+
+    .slice-bar.b-ember { background: var(--ember); width: 84%; }
+    .slice-bar.b-amber { background: var(--amber); width: 66%; }
+
+    /* Scene 3: Multi-Platform Spread */
+    .scene-fan-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .fan-node-box {
+      background: rgba(10, 10, 12, 0.72);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-sm);
+      padding: 22px 14px;
+      text-align: center;
+      transform: translate3d(calc((var(--idx, 0) - 1) * (1 - var(--scene-p, 1)) * -36px), calc((1 - var(--scene-p, 1)) * 22px), 0);
+    }
+
+    .fan-node-box strong {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 1rem;
+      color: #ffffff;
+      margin-bottom: 6px;
+    }
+
+    .fan-node-box span {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      color: var(--ember-dark);
+    }
+
+    /* Scene 4: Tier Distribution Scale Matrix (100% Factual Metrics) */
+    .scene-scale-rows {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .scale-row-label {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--paper-muted);
+      margin-bottom: 7px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .scale-bar-track {
+      height: 8px;
+      border-radius: 4px;
+      background: rgba(245, 240, 235, 0.12);
+      overflow: hidden;
+    }
+
+    .scale-bar-fill {
+      display: block;
+      height: 100%;
+      background: var(--ember);
+      transform-origin: left center;
+      transform: scaleX(calc(0.25 + var(--scene-p, 1) * 0.75));
+    }
+
+    .scale-bar-fill.fill-amber {
+      background: var(--amber);
+    }
+
+    .monitor-foot {
+      padding-top: 18px;
+      border-top: 1px solid var(--border-dark);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .monitor-scrub-track {
+      flex: 1;
+      height: 4px;
+      background: rgba(245, 240, 235, 0.14);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .monitor-scrub-fill {
+      display: block;
+      height: 100%;
+      width: 100%;
+      background: var(--ember);
+      transform-origin: left center;
+      transform: scaleX(var(--scrub-p, 0.25));
+    }
+
+    .monitor-stage-pills {
+      display: flex;
+      gap: 6px;
+    }
+
+    .stage-pill-btn {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 6px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-dark);
+      background: transparent;
+      color: var(--paper-muted);
+      cursor: pointer;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .stage-pill-btn[aria-current="step"] {
+      background: var(--paper);
+      border-color: var(--paper);
+      color: var(--ink);
+    }
+
+    @media (max-width: 960px) {
+      .how-runway {
+        min-height: auto;
+      }
+
+      .how-pinned {
+        position: static;
+        min-height: auto;
+        padding: 76px 20px;
+      }
+
+      .how-stage-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .how-monitor-col {
+        order: -1;
+      }
+
+      .monitor-viewport {
+        min-height: 0;
+      }
+
+      .cutting-monitor {
+        transform: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .how-steps { padding-left: 20px; }
+      .how-step-trigger { grid-template-columns: 44px 1fr; gap: 14px; }
+      .step-number { font-size: 1.6rem; }
+      .cutting-monitor { padding: 20px 18px; }
+      .scene-slices, .scene-fan-grid { grid-template-columns: 1fr; }
+      .slice-card-1, .slice-card-2, .slice-card-3, .fan-node-box { transform: none; }
+    }
+
+    /* Pricing Section: Stepped Depth Monolith + Magnetic CTAs */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 52px;
+      align-items: stretch;
+      perspective: 1200px;
+    }
+
+    .pricing-card {
+      display: flex;
+      flex-direction: column;
+      padding: 36px 30px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: var(--paper);
+      position: relative;
+      transform: translate3d(0, calc((var(--vp-p, 0.5) - 0.5) * var(--col-drift, 0px)), 0) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+      transition: border-color 0.28s ease;
+      will-change: transform;
+    }
+
+    .pricing-card:hover {
+      border-color: var(--border-strong);
+    }
+
+    .pricing-card.featured {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: var(--paper);
+    }
+
+    .pricing-card.featured:hover {
+      border-color: var(--ember);
+    }
+
+    @media (min-width: 960px) {
+      .pricing-card-side { --col-drift: -45px; }
+      .pricing-card-center { --col-drift: -155px; }
+    }
+
+    .pricing-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .pricing-badge {
+      background: var(--ember-fill);
+      color: #ffffff;
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .pricing-name {
+      font-family: var(--font-display);
+      font-size: 1.55rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.025em;
+    }
+
+    .pricing-card.featured .pricing-name {
+      color: #ffffff;
+    }
+
+    .pricing-price {
+      font-family: var(--font-display);
+      font-size: 2.85rem;
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--ink);
+      letter-spacing: -0.03em;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .pricing-card.featured .pricing-price {
+      color: #ffffff;
+    }
+
+    .pricing-price span {
+      font-size: 0.95rem;
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .pricing-card.featured .pricing-price span {
+      color: var(--paper-muted);
+    }
+
+    .pricing-desc {
+      font-size: 0.92rem;
+      color: var(--muted);
+      margin-bottom: 24px;
+      line-height: 1.55;
+      min-height: 2.8em;
+    }
+
+    .pricing-card.featured .pricing-desc {
+      color: var(--paper-muted);
+    }
+
+    .pricing-features {
+      list-style: none;
+      margin-bottom: 28px;
+      flex: 1 1 auto;
+    }
+
+    .pricing-features li {
+      font-size: 0.92rem;
+      color: var(--slate);
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .pricing-card.featured .pricing-features li {
+      color: rgba(245, 240, 235, 0.9);
+      border-color: var(--border-dark);
+    }
+
+    .pricing-features li:last-child {
+      border-bottom: none;
+    }
+
+    .pricing-features .check {
+      color: var(--ember-text);
+      display: inline-flex;
+      flex-shrink: 0;
+    }
+
+    .pricing-card.featured .pricing-features .check {
+      color: var(--amber);
+    }
+
+    .pricing-btn {
+      width: 100%;
+      padding: 14px 20px;
+      min-height: 48px;
+      border-radius: 10px;
+      font-family: var(--font-display);
+      font-size: 0.94rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, transform 0.25s var(--ease-out-expo);
+      text-align: center;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: auto;
+    }
+
+    .pricing-btn.outline {
+      background: transparent;
+      border: 1.5px solid var(--border-strong);
+      color: var(--ink);
+    }
+
+    .pricing-btn.outline:hover {
+      background: var(--ink);
+      color: #ffffff;
+      border-color: var(--ink);
+    }
+
+    .pricing-btn.white-fill {
+      background: #ffffff;
+      border: 1.5px solid #ffffff;
+      color: var(--ink);
+    }
+
+    .pricing-btn.white-fill:hover {
+      background: var(--amber);
+      border-color: var(--amber);
+      color: var(--ink);
+    }
+
+    @media (max-width: 960px) {
+      .pricing-grid {
+        grid-template-columns: 1fr;
+        max-width: 460px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .pricing-card {
+        transform: none;
+      }
+
+      .pricing-desc {
+        min-height: 0;
+      }
+    }
+
+    /* Distribution Section: Deep Horizontal Counter-Parallax Lanes */
+    .distribution-section {
+      background: var(--ink);
+      color: var(--paper);
+      overflow-x: clip;
+    }
+
+    .distribution-section .section-title {
+      color: #ffffff;
+    }
+
+    .distribution-section .section-subtitle {
+      color: var(--paper-muted);
+    }
+
+    .dist-top {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: 48px;
+      align-items: end;
+    }
+
+    .dist-scale-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      border-top: 1px solid var(--border-dark);
+      padding-top: 22px;
+    }
+
+    .dist-stat-value {
+      font-family: var(--font-display);
+      font-size: clamp(1.95rem, 3.2vw, 2.55rem);
+      font-weight: 700;
+      font-variant-numeric: tabular-nums;
+      color: var(--ember-dark);
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+    }
+
+    .dist-stat-label {
+      font-size: 0.85rem;
+      color: var(--paper-muted);
+      margin-top: 6px;
+    }
+
+    .dist-lanes {
+      margin-top: 56px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .dist-lane {
+      background: var(--ink-surface);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-lg);
+      padding: 30px 34px;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 24px;
+      align-items: center;
+      transform: translate3d(calc((var(--vp-p, 0.5) - 0.5) * var(--lane-drift, 0px)), 0, 0);
+      transition: background-color 0.28s ease, border-color 0.28s ease;
+      will-change: transform;
+    }
+
+    .dist-lane-odd { --lane-drift: 140px; }
+    .dist-lane-even { --lane-drift: -140px; }
+
+    .dist-lane:hover {
+      background: var(--ink-surface-hover);
+      border-color: var(--ember);
+    }
+
+    .dist-platform-icon {
+      width: 54px;
+      height: 54px;
+      border-radius: var(--radius-md);
+      background: rgba(232, 67, 42, 0.14);
+      color: var(--ember-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.28s var(--ease-out-expo), background-color 0.25s ease;
+    }
+
+    .dist-lane:hover .dist-platform-icon {
+      transform: scale(1.08);
+      background: rgba(232, 67, 42, 0.24);
+    }
+
+    .dist-platform-name {
+      font-family: var(--font-display);
+      font-size: 1.32rem;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .dist-platform-type {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--ember-dark);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-variant-numeric: tabular-nums;
+    }
+
+    @media (max-width: 900px) {
+      .dist-top {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .dist-lane-odd { --lane-drift: 20px; }
+      .dist-lane-even { --lane-drift: -20px; }
+
+      .dist-lane {
+        grid-template-columns: auto 1fr;
+        gap: 16px 20px;
+        padding: 24px 20px;
+      }
+
+      .dist-platform-type {
+        grid-column: 2;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .dist-scale-strip {
+        grid-template-columns: 1fr;
+        gap: 18px;
+      }
+    }
+
+    /* Clippers Section: Sticky Action Monolith + Ruled Benefits */
+    .clippers-section {
+      background: var(--paper);
+      overflow-x: clip;
+    }
+
+    .clippers-content {
+      display: grid;
+      grid-template-columns: minmax(0, 1.12fr) minmax(0, 0.88fr);
+      gap: 64px;
+      margin-top: 52px;
+      align-items: start;
+    }
+
+    .clipper-benefits {
+      list-style: none;
+    }
+
+    .clipper-benefit {
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 18px;
+      align-items: flex-start;
+    }
+
+    .clipper-benefit:first-child {
+      padding-top: 0;
+    }
+
+    .clipper-benefit:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .cb-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(201, 56, 32, 0.1);
+      color: var(--ember-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .cb-text h3 {
+      font-family: var(--font-display);
+      font-size: 1.24rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 5px;
+      letter-spacing: -0.015em;
+    }
+
+    .cb-text p {
+      font-size: 0.94rem;
+      color: var(--muted);
+      line-height: 1.62;
+      text-wrap: pretty;
+    }
+
+    .clipper-cta-card {
+      position: sticky;
+      top: 112px;
+      background: var(--ink);
+      border-radius: var(--radius-lg);
+      padding: 46px 38px;
+      color: var(--paper);
+    }
+
+    .clipper-cta-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 14px;
+      letter-spacing: -0.025em;
+    }
+
+    .clipper-cta-card p {
+      font-size: 0.98rem;
+      color: var(--paper-muted);
+      line-height: 1.65;
+      margin-bottom: 28px;
+    }
+
+    @media (max-width: 900px) {
+      .clippers-content {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+
+      .clipper-cta-card {
+        position: static;
+        padding: 34px 24px;
+      }
+    }
+
+    /* Proof Section: Dramatic Stepped Parallax Testimonial Columns */
+    .proof-section {
+      background: var(--paper-alt);
+      overflow-x: clip;
+    }
+
+    .proof-grid {
+      display: grid;
+      grid-template-columns: 1.18fr 1fr 1fr;
+      gap: 24px;
+      margin-top: 52px;
+      align-items: stretch;
+    }
+
+    .proof-card {
+      background: var(--paper);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transform: translate3d(0, calc((var(--vp-p, 0.5) - 0.5) * var(--col-drift, 0px)), 0);
+      transition: border-color 0.3s ease;
+      will-change: transform;
+    }
+
+    .proof-card:first-child {
+      background: var(--ink);
+      border-color: var(--ink);
+      color: var(--paper);
+    }
+
+    .proof-card:hover {
+      border-color: var(--ember-fill);
+    }
+
+    @media (min-width: 960px) {
+      .proof-step-1 { --col-drift: -60px; }
+      .proof-step-2 { --col-drift: -135px; }
+      .proof-step-3 { --col-drift: -210px; }
+    }
+
+    .proof-quote {
+      font-size: 0.97rem;
+      color: var(--slate);
+      line-height: 1.72;
+      margin-bottom: 28px;
+    }
+
+    .proof-card:first-child .proof-quote {
+      font-size: 1.06rem;
+      color: var(--paper);
+    }
+
+    .proof-author {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .proof-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--ember-text);
+      flex-shrink: 0;
+    }
+
+    .proof-card:first-child .proof-avatar {
+      background: var(--ink-surface);
+      border-color: var(--border-dark);
+      color: var(--amber);
+    }
+
+    .proof-name {
+      font-family: var(--font-display);
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .proof-card:first-child .proof-name {
+      color: #ffffff;
+    }
+
+    .proof-role {
+      font-size: 0.84rem;
+      color: var(--muted);
+    }
+
+    .proof-card:first-child .proof-role {
+      color: var(--paper-muted);
+    }
+
+    @media (max-width: 900px) {
+      .proof-grid {
+        grid-template-columns: 1fr;
+        max-width: 560px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .proof-card {
+        transform: none;
+      }
+    }
+
+    /* FAQ Section: Sticky Split with Clean Item Borders */
+    .faq-section {
+      overflow-x: clip;
+    }
+
+    .faq-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+      gap: 56px;
+      align-items: start;
+    }
+
+    .faq-sticky {
+      position: sticky;
+      top: 112px;
+    }
+
+    .faq-list {
+      padding: 8px 0;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-item:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .faq-question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 0;
+      cursor: pointer;
+      width: 100%;
+      background: none;
+      border: none;
+      text-align: left;
+      font-family: var(--font-display);
+      font-size: 1.12rem;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.015em;
+      transition: color 0.25s ease;
+    }
+
+    .faq-question:hover {
+      color: var(--ember-text);
+    }
+
+    .faq-icon {
+      color: var(--ember-text);
+      transition: transform 0.3s var(--ease-out-expo);
+      flex-shrink: 0;
+      margin-left: 16px;
+      display: inline-flex;
+    }
+
+    .faq-item.active .faq-icon {
+      transform: rotate(45deg);
+    }
+
+    .faq-answer {
+      display: grid;
+      grid-template-rows: 0fr;
+      transition: grid-template-rows 0.22s var(--ease-out-expo);
+    }
+
+    .faq-item.active .faq-answer {
+      grid-template-rows: 1fr;
+      transition: grid-template-rows 0.34s var(--ease-out-expo);
+    }
+
+    .faq-answer-inner {
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.16s ease, transform 0.18s var(--ease-out-expo);
+    }
+
+    .faq-item.active .faq-answer-inner {
+      opacity: 1;
+      transform: translateY(0);
+      transition: opacity 0.26s ease 0.06s, transform 0.3s var(--ease-out-expo) 0.04s;
+    }
+
+    .faq-answer p {
+      font-size: 0.96rem;
+      color: var(--muted);
+      line-height: 1.7;
+      padding-bottom: 22px;
+      text-wrap: pretty;
+    }
+
+    @media (max-width: 900px) {
+      .faq-layout {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .faq-sticky {
+        position: static;
+      }
+    }
+
+    /* CTA / Intake Section */
+    .cta-section {
+      background: var(--ink);
+      position: relative;
+      overflow-x: clip;
+    }
+
+    .cta-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.05fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .cta-section .section-title {
+      color: #ffffff;
+    }
+
+    .cta-desc {
+      font-size: 1.06rem;
+      color: var(--paper-muted);
+      line-height: 1.7;
+      max-width: 46ch;
+      margin-bottom: 28px;
+      text-wrap: pretty;
+    }
+
+    .cta-direct {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--paper-muted);
+    }
+
+    .cta-direct a {
+      color: #ffffff;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-color: var(--ember);
+      transition: color 0.2s ease;
+    }
+
+    .cta-direct a:hover {
+      color: var(--amber);
+    }
+
+    .intake-card {
+      background: var(--ink-surface);
+      border: 1px solid var(--border-dark);
+      border-radius: var(--radius-lg);
+      padding: 34px;
+    }
+
+    .intake-tabs {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      padding: 5px;
+      background: rgba(245, 240, 235, 0.05);
+      border: 1px solid var(--border-dark);
+      border-radius: 10px;
+      margin-bottom: 24px;
+    }
+
+    .intake-tab-indicator {
+      position: absolute;
+      top: 5px;
+      left: 5px;
+      bottom: 5px;
+      width: calc(50% - 8px);
+      background: var(--paper);
+      border-radius: 7px;
+      opacity: 0;
+      transition: transform 0.28s var(--ease-out-expo);
+      pointer-events: none;
+    }
+
+    .intake-tabs.is-switching .intake-tab-indicator {
+      opacity: 1;
+    }
+
+    .intake-tabs[data-active="clipper"] .intake-tab-indicator {
+      transform: translateX(calc(100% + 6px));
+    }
+
+    .intake-tab {
+      position: relative;
+      z-index: 1;
+      font-family: var(--font-display);
+      font-size: 0.88rem;
+      font-weight: 600;
+      padding: 10px 14px;
+      border-radius: 7px;
+      border: none;
+      background: transparent;
+      color: var(--paper-muted);
+      cursor: pointer;
+      transition: color 0.2s ease;
+    }
+
+    .intake-tab[aria-selected="true"] {
+      background: var(--paper);
+      color: var(--ink);
+    }
+
+    .intake-tabs.is-switching .intake-tab[aria-selected="true"] {
+      background: transparent;
+    }
+
+    .intake-tab:not([aria-selected="true"]):hover {
+      color: #ffffff;
+    }
+
+    .intake-panel-stage {
+      view-transition-name: intake-body;
+    }
+
+    .intake-panel:not([hidden]) {
+      animation: panelEnter 0.22s var(--ease-out-expo);
+    }
+
+    .intake-panel[hidden] {
+      display: none;
+    }
+
+    @keyframes panelEnter {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .field-group {
+      margin-bottom: 18px;
+    }
+
+    .field-label {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 0.84rem;
+      font-weight: 600;
+      color: var(--paper);
+      margin-bottom: 8px;
+    }
+
+    .plan-pills {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .plan-pill {
+      font-family: var(--font-body);
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 10px 8px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-dark);
+      background: rgba(245, 240, 235, 0.03);
+      color: var(--paper-muted);
+      cursor: pointer;
+      text-align: center;
+      font-variant-numeric: tabular-nums;
+      transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease, transform 0.16s var(--ease-out-expo);
+    }
+
+    .plan-pill:hover {
+      border-color: rgba(245, 240, 235, 0.35);
+      color: #ffffff;
+    }
+
+    .plan-pill[aria-pressed="true"] {
+      background: rgba(232, 67, 42, 0.2);
+      border-color: var(--ember);
+      color: #ffffff;
+    }
+
+    .intake-input,
+    .intake-select {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-dark);
+      background: rgba(245, 240, 235, 0.04);
+      color: #ffffff;
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      caret-color: var(--amber);
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .intake-select option {
+      background: var(--ink-surface);
+      color: #ffffff;
+    }
+
+    .intake-input::placeholder {
+      color: rgba(245, 240, 235, 0.58);
+    }
+
+    .intake-input:focus,
+    .intake-select:focus {
+      outline: none;
+      border-color: var(--amber);
+      background: rgba(245, 240, 235, 0.07);
+    }
+
+    .intake-input[aria-invalid="true"] {
+      border-color: #ff6b52;
+    }
+
+    .intake-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .intake-actions .btn-primary {
+      flex: 1 1 200px;
+    }
+
+    .btn-ghost-dark {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--paper);
+      background: transparent;
+      padding: 14px 20px;
+      min-height: 50px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border-dark);
+      cursor: pointer;
+      transition: border-color 0.25s ease, background-color 0.25s ease, transform 0.2s var(--ease-out-expo);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-ghost-dark:hover {
+      border-color: rgba(245, 240, 235, 0.45);
+      background: rgba(245, 240, 235, 0.06);
+    }
+
+    .intake-feedback {
+      margin-top: 12px;
+      font-size: 0.84rem;
+      min-height: 1.3em;
+      color: var(--paper-muted);
+    }
+
+    .intake-feedback.is-error { color: #ff8b75; }
+    .intake-feedback.is-success { color: #ffd166; }
+
+    @media (max-width: 900px) {
+      .cta-layout {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+
+      .intake-card {
+        padding: 24px 20px;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .plan-pills { grid-template-columns: 1fr; }
+      .intake-tab { font-size: 0.8rem; padding: 10px 8px; }
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--ink);
+      border-top: 1px solid var(--border-dark);
+      padding: 56px 40px 32px;
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 48px;
+    }
+
+    .footer-brand .nav-logo {
+      color: #ffffff;
+      margin-bottom: 14px;
+    }
+
+    .footer-brand p {
+      font-size: 0.9rem;
+      color: var(--paper-subtle);
+      line-height: 1.65;
+      max-width: 32ch;
+    }
+
+    .footer-col h4 {
+      font-family: var(--font-mono);
+      font-size: 0.76rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    .footer-col a {
+      display: block;
+      font-size: 0.9rem;
+      color: var(--paper-subtle);
+      text-decoration: none;
+      margin-bottom: 10px;
+      transition: color 0.2s ease;
+    }
+
+    .footer-col a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    .footer-bottom {
+      max-width: 1280px;
+      margin: 40px auto 0;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .footer-bottom p,
+    .footer-bottom a {
+      font-size: 0.84rem;
+      color: var(--paper-subtle);
+      text-decoration: none;
+    }
+
+    .footer-bottom a:hover {
+      color: #ffffff;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+
+    @media (max-width: 900px) {
+      .footer-content {
+        grid-template-columns: 1fr 1fr;
+        gap: 36px;
+      }
+
+      .footer {
+        padding: 44px 20px 24px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    .counter-value {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Native CSS Scroll-Driven Clip-Path Portal Wipes */
+    @supports (animation-timeline: view()) {
+      @media (prefers-reduced-motion: no-preference) {
+        .wipe-card {
+          animation: clipWipe linear both;
+          animation-timeline: view();
+          animation-range: entry 0% cover 24%;
+        }
+      }
+    }
+
+    @keyframes clipWipe {
+      from {
+        clip-path: inset(0 0 22% 0 round var(--radius-lg));
+        transform: translate3d(0, 28px, 0);
+      }
+      to {
+        clip-path: inset(0 0 0 0 round var(--radius-lg));
+        transform: translate3d(0, 0, 0);
+      }
+    }
+
+    /* Comprehensive Prefers Reduced Motion Fallbacks */
+    @media (prefers-reduced-motion: reduce) {
+      .hero-shader {
+        display: none;
+      }
+
+      .word-slide,
+      .hero h1 .highlight::after,
+      .stage-playhead-rail,
+      .forge-arc,
+      .forge-node,
+      .forge-pulse,
+      .intake-panel:not([hidden]),
+      .wipe-card,
+      .scroll-progress {
+        animation: none !important;
+        clip-path: none !important;
+      }
+
+      .stage-playhead-rail {
+        transform: translateX(46%) !important;
+      }
+
+      .forge-pulse {
+        display: none;
+      }
+
+      .hero-content,
+      .stage-plane,
+      .pillar-card,
+      .pricing-card,
+      .dist-lane,
+      .proof-card,
+      .cutting-monitor,
+      .magnetic-wrap,
+      .intake-scrub-needle,
+      .intake-wave span,
+      .slice-card-1,
+      .slice-card-2,
+      .slice-card-3,
+      .slice-bar,
+      .fan-node-box,
+      .scale-bar-fill {
+        transform: none !important;
+        transition: none !important;
+      }
+
+      .kinetic-row {
+        transform: none !important;
+        flex-wrap: wrap;
+        width: auto;
+        max-width: 1280px;
+        margin: 0 auto;
+        justify-content: center;
+        gap: 8px 0;
+        padding: 0 20px;
+      }
+
+      .how-runway {
+        min-height: auto;
+      }
+
+      .how-pinned {
+        position: static;
+        min-height: auto;
+        padding: 76px 40px;
+      }
+
+      .how-rail-fill,
+      .monitor-scrub-fill {
+        transform: scaleY(1) scaleX(1) !important;
+      }
+
+      .faq-answer-inner {
+        transform: none;
+        transition: opacity 0.15s ease;
+      }
+
+      .intake-tab-indicator {
+        transition: none;
+      }
+
+      .mobile-menu a {
+        transform: none;
+        transition: opacity 0.15s ease, color 0.15s ease;
+      }
+
+      .mobile-menu.active a {
+        transition-delay: 0ms !important;
+      }
+
+      .nav-logo:hover .logo-mark,
+      .nav-cta:hover,
+      .btn-primary:hover,
+      .btn-secondary-hero:hover,
+      .ledger-row:hover,
+      .dist-lane:hover .dist-platform-icon,
+      .how-step.is-current .step-number {
+        transform: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
+
+  <div class="scroll-progress" id="scrollProgress" aria-hidden="true"></div>
+  <div class="cursor-dot" id="cursorDot" aria-hidden="true"></div>
+  <div class="cursor-ring" id="cursorRing" aria-hidden="true"></div>
+
+  <!-- Navigation -->
+  <header>
+    <nav class="nav" id="mainNav" aria-label="Primary navigation">
+      <a href="#hero" class="nav-logo">
+        <span class="logo-mark" aria-hidden="true">CF</span>
+        <span>ClipForge</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="#services">Services</a></li>
+        <li><a href="#how-it-works">Process</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="#distribution">Distribution</a></li>
+        <li><a href="#clippers">Clippers</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact" class="nav-cta" data-intake-tab="creator">Get Started</a></li>
+      </ul>
+      <button class="hamburger" id="hamburger" type="button" aria-label="Open menu" aria-expanded="false"
+        aria-controls="mobileMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu" role="dialog" aria-modal="true" aria-label="Mobile navigation"
+    aria-hidden="true">
+    <a href="#services" class="mobile-link" tabindex="-1">Services</a>
+    <a href="#how-it-works" class="mobile-link" tabindex="-1">Process</a>
+    <a href="#pricing" class="mobile-link" tabindex="-1">Pricing</a>
+    <a href="#distribution" class="mobile-link" tabindex="-1">Distribution</a>
+    <a href="#clippers" class="mobile-link" tabindex="-1">Clippers</a>
+    <a href="#faq" class="mobile-link" tabindex="-1">FAQ</a>
+    <a href="#contact" class="mobile-link" data-intake-tab="creator" tabindex="-1">Get Started</a>
+  </div>
+
+  <main id="main-content">
+    <!-- Hero Section: WebGL2 GLSL Cinema Ember Field + 3D Depth Multi-Plane Parallax -->
+    <section class="hero" id="hero">
+      <canvas class="hero-shader" id="heroShaderCanvas" aria-hidden="true"></canvas>
+      <div class="hero-vignette" aria-hidden="true"></div>
+
+      <div class="hero-inner">
+        <div class="hero-content">
+          <h1>
+            <span class="word-mask"><span class="word-slide" style="--wi:0">Turn</span></span>
+            <span class="word-mask"><span class="word-slide" style="--wi:1">your</span></span>
+            <span class="word-mask"><span class="word-slide nowrap" style="--wi:2">long-form</span></span>
+            <span class="word-mask"><span class="word-slide" style="--wi:3">content</span></span>
+            <span class="word-mask"><span class="word-slide" style="--wi:4">into</span></span>
+            <span class="word-mask"><span class="word-slide" style="--wi:5">a</span></span>
+            <span class="word-mask"><span class="word-slide highlight" style="--wi:6">distribution</span></span>
+            <span class="word-mask"><span class="word-slide" style="--wi:7">machine.</span></span>
+          </h1>
+          <p class="hero-desc">
+            We clip, edit, and distribute your best moments across dozens of fan pages on Instagram, YouTube, and Facebook —
+            so your content reaches audiences you'd never touch alone.
+          </p>
+          <div class="hero-actions">
+            <span class="magnetic-wrap">
+              <a href="#pricing" class="btn-primary">
+                View Plans
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25"
+                  stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </a>
+            </span>
+            <span class="magnetic-wrap">
+              <a href="#how-it-works" class="btn-secondary-hero">See How It Works</a>
+            </span>
+          </div>
+          <div class="hero-stats">
+            <div class="hero-stat">
+              <div class="hero-stat-value counter-value" data-target="75">75</div>
+              <div class="hero-stat-label">Max fan pages per client</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-value">3</div>
+              <div class="hero-stat-label">Platforms covered</div>
+            </div>
+            <div class="hero-stat">
+              <div class="hero-stat-value counter-value" data-target="250">250</div>
+              <div class="hero-stat-label">Weekly reel placements</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cutting-stage" aria-hidden="true">
+          <div class="stage-plane stage-plane-timeline">
+            <div class="stage-bar-head">
+              <span class="stage-bar-label">Source Timeline</span>
+              <span class="stage-bar-ratio">1 Video → 75 Pages</span>
+            </div>
+            <div class="stage-track-wrap">
+              <div class="stage-track-bg">
+                <span class="stage-clip stage-clip-1"></span>
+                <span class="stage-clip stage-clip-2"></span>
+                <span class="stage-clip stage-clip-3"></span>
+              </div>
+              <div class="stage-playhead-rail">
+                <span class="stage-playhead"></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="stage-plane stage-plane-fan">
+            <svg viewBox="0 0 420 185" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <line x1="210" y1="0" x2="210" y2="20" stroke="rgba(245,240,235,0.35)" stroke-width="1.5" />
+              <circle cx="210" cy="20" r="3.5" fill="#f0a500" />
+
+              <path d="M 210 20 C 210 70, 74 64, 74 112" stroke="rgba(245,240,235,0.18)" stroke-width="1.5" />
+              <path d="M 210 20 L 210 112" stroke="rgba(245,240,235,0.18)" stroke-width="1.5" />
+              <path d="M 210 20 C 210 70, 346 64, 346 112" stroke="rgba(245,240,235,0.18)" stroke-width="1.5" />
+
+              <path class="forge-arc forge-arc-1" pathLength="180" d="M 210 20 C 210 70, 74 64, 74 112" stroke="rgba(245,240,235,0.65)" stroke-width="1.75" />
+              <path class="forge-arc forge-arc-2" pathLength="180" d="M 210 20 L 210 112" stroke="rgba(245,240,235,0.65)" stroke-width="1.75" />
+              <path class="forge-arc forge-arc-3" pathLength="180" d="M 210 20 C 210 70, 346 64, 346 112" stroke="rgba(245,240,235,0.65)" stroke-width="1.75" />
+
+              <path class="forge-pulse forge-pulse-1" pathLength="180" d="M 210 20 C 210 70, 74 64, 74 112" stroke="#e8432a" stroke-width="2.75" stroke-linecap="round" />
+              <path class="forge-pulse forge-pulse-2" pathLength="180" d="M 210 20 L 210 112" stroke="#f0a500" stroke-width="2.75" stroke-linecap="round" />
+              <path class="forge-pulse forge-pulse-3" pathLength="180" d="M 210 20 C 210 70, 346 64, 346 112" stroke="#e8432a" stroke-width="2.75" stroke-linecap="round" />
+
+              <g class="forge-node forge-node-1">
+                <circle cx="74" cy="130" r="18" fill="#141418" stroke="rgba(245,240,235,0.45)" stroke-width="1.75" />
+                <rect x="66.5" y="122.5" width="15" height="15" rx="4" stroke="#ff7a63" stroke-width="1.75" />
+                <circle cx="74" cy="130" r="3.2" stroke="#ff7a63" stroke-width="1.6" />
+                <circle cx="78.2" cy="125.8" r="1" fill="#ff7a63" />
+              </g>
+              <text x="74" y="164" text-anchor="middle" fill="#ffffff" font-family="'Space Grotesk', system-ui, sans-serif" font-size="13.5" font-weight="700">IG Reels</text>
+              <text x="74" y="180" text-anchor="middle" fill="rgba(245,240,235,0.72)" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="10.5" font-weight="500" letter-spacing="0.6">25 PAGES</text>
+
+              <g class="forge-node forge-node-2">
+                <circle cx="210" cy="130" r="18" fill="#141418" stroke="rgba(245,240,235,0.45)" stroke-width="1.75" />
+                <polygon points="206.5,124 217,130 206.5,136" fill="#f0a500" />
+              </g>
+              <text x="210" y="164" text-anchor="middle" fill="#ffffff" font-family="'Space Grotesk', system-ui, sans-serif" font-size="13.5" font-weight="700">YT Shorts</text>
+              <text x="210" y="180" text-anchor="middle" fill="rgba(245,240,235,0.72)" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="10.5" font-weight="500" letter-spacing="0.6">25 CHANNELS</text>
+
+              <g class="forge-node forge-node-3">
+                <circle cx="346" cy="130" r="18" fill="#141418" stroke="rgba(245,240,235,0.45)" stroke-width="1.75" />
+                <path d="M 348.2 122.5 H 346.4 C 344.9 122.5 344.1 123.4 344.1 124.9 V 137.5 M 341.8 129.5 H 347.8" stroke="#ff7a63" stroke-width="1.85" stroke-linecap="round" />
+              </g>
+              <text x="346" y="164" text-anchor="middle" fill="#ffffff" font-family="'Space Grotesk', system-ui, sans-serif" font-size="13.5" font-weight="700">FB Reels</text>
+              <text x="346" y="180" text-anchor="middle" fill="rgba(245,240,235,0.72)" font-family="'JetBrains Mono', ui-monospace, monospace" font-size="10.5" font-weight="500" letter-spacing="0.6">25 PAGES</text>
+            </svg>
+          </div>
+
+          <div class="stage-plane stage-plane-summary">
+            <div class="stage-summary-item"><strong>250 / wk</strong><span>Weekly reels</span></div>
+            <div class="stage-summary-item"><strong>10 / page</strong><span>Cadence</span></div>
+            <div class="stage-summary-item"><strong>1,000 / mo</strong><span>Scale cap</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Scroll-Driven Velocity-Reactive Oversized Kinetic Band -->
+    <div class="kinetic-band" aria-label="Distribution capabilities">
+      <div class="kinetic-row kinetic-row-primary">
+        <span class="kinetic-token"><span class="kinetic-dot" aria-hidden="true"></span> Instagram Reels</span>
+        <span class="kinetic-token"><span class="kinetic-dot" aria-hidden="true"></span> YouTube Shorts</span>
+        <span class="kinetic-token"><span class="kinetic-dot" aria-hidden="true"></span> Facebook Reels</span>
+        <span class="kinetic-token"><span class="kinetic-dot" aria-hidden="true"></span> Content Clipping</span>
+        <span class="kinetic-token"><span class="kinetic-dot" aria-hidden="true"></span> Fan Page Network</span>
+        <span class="kinetic-token"><span class="kinetic-dot" aria-hidden="true"></span> AI-Powered Editing</span>
+        <span class="kinetic-token"><span class="kinetic-dot" aria-hidden="true"></span> Performance Analytics</span>
+      </div>
+      <div class="kinetic-row kinetic-row-secondary">
+        <span class="kinetic-token"><span class="kinetic-dot" aria-hidden="true"></span> Moment Discovery</span>
+        <span class="kinetic-token"><span class="kinetic-dot" aria-hidden="true"></span> Captions &amp; Subtitles</span>
+        <span class="kinetic-token"><span class="kinetic-dot" aria-hidden="true"></span> Hooks &amp; Openings</span>
+        <span class="kinetic-token"><span class="kinetic-dot" aria-hidden="true"></span> B-Roll &amp; Visuals</span>
+        <span class="kinetic-token"><span class="kinetic-dot" aria-hidden="true"></span> Thumbnails &amp; Covers</span>
+        <span class="kinetic-token"><span class="kinetic-dot" aria-hidden="true"></span> Distribution at Scale</span>
+        <span class="kinetic-token"><span class="kinetic-dot" aria-hidden="true"></span> Up to 75 Fan Pages</span>
+      </div>
+    </div>
+
+    <!-- Problem Section -->
+    <section class="problem-section band" id="problem">
+      <div class="section problem-split">
+        <div class="problem-sticky">
+          <h2 class="section-title">Great content deserves<br>more than one audience.</h2>
+          <p class="section-subtitle">Most creators pour hours into long-form content, then watch it reach a fraction of the
+            people who'd love it. Sound familiar?</p>
+          <div class="problem-summary-strip">
+            <span>1 long-form upload</span>
+            <span>Multi-platform short-form</span>
+            <span>Up to 75 social accounts</span>
+          </div>
+        </div>
+
+        <div class="problem-planks">
+          <article class="problem-plank wipe-card">
+            <div class="plank-index">01</div>
+            <div>
+              <h3>Your content dies after upload</h3>
+              <p>You publish a great 30-minute video that took days to produce. It gets views on your channel, then the
+                algorithm moves on. The best moments inside never surface again.</p>
+            </div>
+          </article>
+          <article class="problem-plank wipe-card">
+            <div class="plank-index">02</div>
+            <div>
+              <h3>Repurposing is a full-time job</h3>
+              <p>Clipping, editing, captioning, scheduling across platforms — it requires dedicated staff. Most creators
+                can't afford the time or the team for consistent short-form output.</p>
+            </div>
+          </article>
+          <article class="problem-plank wipe-card">
+            <div class="plank-index">03</div>
+            <div>
+              <h3>One account limits your reach</h3>
+              <p>Posting clips on your own account means you're competing with your own content. Fan pages and secondary
+                channels multiply touchpoints without cannibalizing your main presence.</p>
+            </div>
+          </article>
+          <article class="problem-plank wipe-card">
+            <div class="plank-index">04</div>
+            <div>
+              <h3>Distribution costs too much</h3>
+              <p>Agencies that offer multi-platform distribution charge premium rates that only top-tier creators can
+                afford. Mid-tier creators are left without scalable solutions.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services-section band" id="services">
+      <div class="section">
+        <h2 class="section-title">End-to-end. Not just editing.</h2>
+        <p class="section-subtitle">From finding the golden moments in your content to publishing polished reels across your
+          fan page network — we handle the entire pipeline.</p>
+
+        <div class="services-pillars">
+          <article class="pillar-card pillar-lead pillar-parallax-a parallax-vp tilt-card">
+            <div class="pillar-head">
+              <div class="service-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="6" cy="6" r="3" />
+                  <circle cx="6" cy="18" r="3" />
+                  <path d="M20 4 8.12 15.88M14.47 14.48 20 20M8.12 8.12 12 12" />
+                </svg>
+              </div>
+              <span class="pillar-phase">Post-production</span>
+            </div>
+            <div>
+              <h3>Professional Editing</h3>
+              <p>Every clip gets human polish — pacing, cuts, color grading — so it feels native to short-form platforms.</p>
+            </div>
+          </article>
+
+          <article class="pillar-card pillar-parallax-b parallax-vp tilt-card">
+            <div class="pillar-head">
+              <div class="service-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="9" />
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M12 3v3M12 18v3M3 12h3M18 12h3" />
+                </svg>
+              </div>
+              <span class="pillar-phase">Selection</span>
+            </div>
+            <div>
+              <h3>Moment Discovery</h3>
+              <p>We scan your long-form content to identify the most shareable, engaging, viral-worthy segments.</p>
+            </div>
+          </article>
+
+          <article class="pillar-card pillar-parallax-c parallax-vp tilt-card">
+            <div class="pillar-head">
+              <div class="service-icon" aria-hidden="true">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 3v4M12 17v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M3 12h4M17 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+                </svg>
+              </div>
+              <span class="pillar-phase">Velocity</span>
+            </div>
+            <div>
+              <h3>AI-Powered Clipping</h3>
+              <p>Smart tools accelerate the clipping process, ensuring speed without sacrificing selection quality.</p>
+            </div>
+          </article>
+        </div>
+
+        <div class="services-ledger wipe-card">
+          <div class="ledger-row">
+            <div class="ledger-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="3" />
+                <path d="M7 15h4M13 15h4M7 11h2M11 11h6" />
+              </svg>
+            </div>
+            <div>
+              <h3>Captions &amp; Subtitles</h3>
+              <p>Animated, styled captions that boost retention and accessibility. Most viewers watch without sound.</p>
+            </div>
+          </div>
+
+          <div class="ledger-row">
+            <div class="ledger-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z" />
+              </svg>
+            </div>
+            <div>
+              <h3>Hooks &amp; Openings</h3>
+              <p>Custom attention-grabbing intros that stop the scroll and hold viewers through the first critical seconds.</p>
+            </div>
+          </div>
+
+          <div class="ledger-row">
+            <div class="ledger-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="5" width="18" height="14" rx="2" />
+                <path d="M7 5v14M17 5v14M3 10h4M17 10h4M3 14h4M17 14h4" />
+              </svg>
+            </div>
+            <div>
+              <h3>B-Roll &amp; Visuals</h3>
+              <p>Relevant supplementary footage, graphics, and visual layers that elevate production value.</p>
+            </div>
+          </div>
+
+          <div class="ledger-row">
+            <div class="ledger-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M2 14h4M10 8h4M18 16h4" />
+              </svg>
+            </div>
+            <div>
+              <h3>Transitions &amp; Effects</h3>
+              <p>Platform-native transitions, sound design, and motion effects that match current content trends.</p>
+            </div>
+          </div>
+
+          <div class="ledger-row">
+            <div class="ledger-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="16" rx="2" />
+                <circle cx="8.5" cy="9.5" r="1.5" />
+                <path d="m21 15-4.5-4.5a1.5 1.5 0 0 0-2.12 0L6 19" />
+              </svg>
+            </div>
+            <div>
+              <h3>Thumbnails &amp; Covers</h3>
+              <p>Custom-designed cover images that maximize click-through rate on every platform.</p>
+            </div>
+          </div>
+
+          <div class="ledger-row">
+            <div class="ledger-icon" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v18h18" />
+                <path d="M7 16v-4M12 16V8M17 16v-6" />
+              </svg>
+            </div>
+            <div>
+              <h3>Strategy &amp; Analytics</h3>
+              <p>Content strategy guidance and performance reporting so you know what's working and why.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CENTERPIECE: Full-Viewport 310vh Pinned Cinema Cutting-Room Stage -->
+    <section class="how-section band" id="how-it-works">
+      <div class="how-runway" id="howRunway">
+        <div class="how-pinned">
+          <div class="how-pinned-inner">
+            <div class="how-header-row">
+              <div>
+                <h2 class="section-title">How ClipForge works.</h2>
+                <p class="section-subtitle">A streamlined four-step process from your raw content to a fully operational
+                  distribution network.</p>
+              </div>
+              <div class="how-timecode-readout" aria-live="off">
+                <span>SCRUB TIMECODE</span>
+                <strong id="howTimecode">00:00 · STAGE 01</strong>
+              </div>
+            </div>
+
+            <div class="how-stage-layout">
+              <div class="how-steps" id="howSteps">
+                <div class="how-rail" aria-hidden="true">
+                  <span class="how-rail-fill" id="howRailFill"></span>
+                </div>
+
+                <div class="how-step is-active is-current" data-step="1">
+                  <button class="how-step-trigger" type="button" aria-pressed="true">
+                    <span class="step-number">01</span>
+                    <span class="step-content">
+                      <h3>Share your content</h3>
+                      <p>Send us your long-form videos — podcasts, YouTube videos, streams, tutorials. We'll identify
+                        the best moments worth clipping.</p>
+                    </span>
+                  </button>
+                </div>
+
+                <div class="how-step" data-step="2">
+                  <button class="how-step-trigger" type="button" aria-pressed="false">
+                    <span class="step-number">02</span>
+                    <span class="step-content">
+                      <h3>We clip, edit, and polish</h3>
+                      <p>Our clippers transform raw moments into platform-optimized short-form content with captions, hooks,
+                        effects, and sound design. AI accelerates, humans finalize.</p>
+                    </span>
+                  </button>
+                </div>
+
+                <div class="how-step" data-step="3">
+                  <button class="how-step-trigger" type="button" aria-pressed="false">
+                    <span class="step-number">03</span>
+                    <span class="step-content">
+                      <h3>Distribute across fan pages</h3>
+                      <p>Your polished reels are published through a network of dedicated fan pages on Instagram, YouTube, and
+                        Facebook — each posting 10 reels per week.</p>
+                    </span>
+                  </button>
+                </div>
+
+                <div class="how-step" data-step="4">
+                  <button class="how-step-trigger" type="button" aria-pressed="false">
+                    <span class="step-number">04</span>
+                    <span class="step-content">
+                      <h3>Track and grow</h3>
+                      <p>Receive performance reports showing reach, engagement, and growth across all pages and platforms. We
+                        optimize strategy based on what performs best.</p>
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="how-monitor-col">
+                <div class="cutting-monitor" id="cuttingMonitor" data-stage="1" aria-label="Cutting-Room stage visualizer">
+                  <div class="monitor-head">
+                    <span class="monitor-stage-name" id="monitorStageLabel">Stage 01 · Intake &amp; Scan</span>
+                    <span class="monitor-stage-counter" id="monitorStageCounter">01 / 04</span>
+                  </div>
+
+                  <div class="monitor-viewport">
+                    <div class="monitor-scene monitor-scene-1">
+                      <div class="scene-title">Long-form moment extraction</div>
+                      <p class="scene-caption">Podcasts, streams, webinars, and YouTube uploads scanned to isolate high-retention hooks.</p>
+                      <div class="scene-intake-bar">
+                        <span class="intake-scrub-needle" aria-hidden="true"></span>
+                        <div class="intake-wave" aria-hidden="true">
+                          <span style="--h: 28%"></span><span style="--h: 42%"></span>
+                          <span class="is-hot" style="--h: 88%"></span><span class="is-hot" style="--h: 96%"></span><span class="is-hot" style="--h: 74%"></span>
+                          <span style="--h: 35%"></span><span style="--h: 48%"></span><span style="--h: 30%"></span><span style="--h: 52%"></span>
+                          <span class="is-gold" style="--h: 84%"></span><span class="is-gold" style="--h: 94%"></span><span class="is-gold" style="--h: 78%"></span>
+                          <span style="--h: 40%"></span><span style="--h: 26%"></span><span style="--h: 58%"></span><span style="--h: 45%"></span>
+                          <span class="is-hot" style="--h: 90%"></span><span class="is-hot" style="--h: 98%"></span><span class="is-hot" style="--h: 80%"></span>
+                          <span style="--h: 34%"></span><span style="--h: 46%"></span><span style="--h: 32%"></span><span style="--h: 50%"></span><span style="--h: 38%"></span>
+                        </div>
+                        <div class="scene-meta-row">
+                          <span>RAW MASTER UPLOAD</span>
+                          <span>GOLDEN SEGMENTS FLAGGED</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="monitor-scene monitor-scene-2">
+                      <div class="scene-title">Vertical short-form finishing</div>
+                      <p class="scene-caption">AI speeds up rough cuts; human clippers craft hooks, styled subtitles, B-roll, and sound design.</p>
+                      <div class="scene-slices">
+                        <div class="slice-card slice-card-1">
+                          <span class="slice-badge">CLIP A · HOOK</span>
+                          <div class="slice-tracks">
+                            <span class="slice-bar b-ember"></span>
+                            <span class="slice-bar b-amber"></span>
+                            <span class="slice-bar"></span>
+                          </div>
+                        </div>
+                        <div class="slice-card slice-card-2">
+                          <span class="slice-badge">CLIP B · CAPTIONS</span>
+                          <div class="slice-tracks">
+                            <span class="slice-bar b-amber"></span>
+                            <span class="slice-bar b-ember"></span>
+                            <span class="slice-bar"></span>
+                          </div>
+                        </div>
+                        <div class="slice-card slice-card-3">
+                          <span class="slice-badge">CLIP C · B-ROLL</span>
+                          <div class="slice-tracks">
+                            <span class="slice-bar b-ember"></span>
+                            <span class="slice-bar"></span>
+                            <span class="slice-bar b-amber"></span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="monitor-scene monitor-scene-3">
+                      <div class="scene-title">Dedicated fan-page fan-out</div>
+                      <p class="scene-caption">One approved edit distributes across your coordinated fan-page fleet on three short-form platforms.</p>
+                      <div class="scene-fan-grid">
+                        <div class="fan-node-box" style="--idx: 0">
+                          <strong>Instagram Reels</strong>
+                          <span>10 REELS / PAGE / WK</span>
+                        </div>
+                        <div class="fan-node-box" style="--idx: 1">
+                          <strong>YouTube Shorts</strong>
+                          <span>10 REELS / PAGE / WK</span>
+                        </div>
+                        <div class="fan-node-box" style="--idx: 2">
+                          <strong>Facebook Reels</strong>
+                          <span>10 REELS / PAGE / WK</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="monitor-scene monitor-scene-4">
+                      <div class="scene-title">Multi-tier reach reporting</div>
+                      <p class="scene-caption">Scale across 15 to 75 social accounts with weekly and monthly performance insights.</p>
+                      <div class="scene-scale-rows">
+                        <div>
+                          <div class="scale-row-label"><span>Basic · 5 / platform · 15 accounts</span><span>10 reels / page / wk</span></div>
+                          <div class="scale-bar-track"><span class="scale-bar-fill" style="width: 30%"></span></div>
+                        </div>
+                        <div>
+                          <div class="scale-row-label"><span>Growth · 10 / platform · 30 accounts</span><span>10 reels / page / wk</span></div>
+                          <div class="scale-bar-track"><span class="scale-bar-fill fill-amber" style="width: 58%"></span></div>
+                        </div>
+                        <div>
+                          <div class="scale-row-label"><span>Premium · 25 / platform · 75 accounts</span><span>Up to 250 / wk</span></div>
+                          <div class="scale-bar-track"><span class="scale-bar-fill" style="width: 100%"></span></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="monitor-foot">
+                    <div class="monitor-scrub-track" aria-hidden="true">
+                      <span class="monitor-scrub-fill" id="monitorScrubFill"></span>
+                    </div>
+                    <div class="monitor-stage-pills" role="group" aria-label="Jump to pipeline stage">
+                      <button class="stage-pill-btn" type="button" data-jump-stage="1" aria-current="step">01</button>
+                      <button class="stage-pill-btn" type="button" data-jump-stage="2">02</button>
+                      <button class="stage-pill-btn" type="button" data-jump-stage="3">03</button>
+                      <button class="stage-pill-btn" type="button" data-jump-stage="4">04</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="section band" id="pricing">
+      <h2 class="section-title">Simple, transparent plans.</h2>
+      <p class="section-subtitle">Every plan includes full editing, captions, scheduling, publishing, and analytics.
+        Choose your distribution scale.</p>
+
+      <div class="pricing-grid">
+        <div class="pricing-card pricing-card-side parallax-vp tilt-card">
+          <div class="pricing-header">
+            <div class="pricing-name">Basic</div>
+          </div>
+          <div class="pricing-price">₹7,000<span>/month</span></div>
+          <p class="pricing-desc">Ideal for creators testing fan-page distribution for the first time.</p>
+          <ul class="pricing-features">
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> 5 fan pages per platform</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> 15 total social accounts</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> 10 reels/page/week</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> Instagram, YouTube, Facebook</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> Captions &amp; hooks included</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> Monthly performance report</li>
+          </ul>
+          <a href="#contact" class="pricing-btn outline" data-plan="Basic" data-intake-tab="creator">Choose Basic</a>
+        </div>
+
+        <div class="pricing-card featured pricing-card-center parallax-vp tilt-card">
+          <div class="pricing-header">
+            <div class="pricing-name">Growth</div>
+            <span class="pricing-badge">Most Popular</span>
+          </div>
+          <div class="pricing-price">₹10,000<span>/month</span></div>
+          <p class="pricing-desc">For creators ready to build serious multi-platform presence.</p>
+          <ul class="pricing-features">
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> 10 fan pages per platform</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> 30 total social accounts</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> 10 reels/page/week</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> Instagram, YouTube, Facebook</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> Full editing + B-roll + effects</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> Weekly performance reports</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> Content strategy guidance</li>
+          </ul>
+          <a href="#contact" class="pricing-btn white-fill" data-plan="Growth" data-intake-tab="creator">Choose Growth</a>
+        </div>
+
+        <div class="pricing-card pricing-card-side parallax-vp tilt-card">
+          <div class="pricing-header">
+            <div class="pricing-name">Premium</div>
+          </div>
+          <div class="pricing-price">₹20,000<span>/month</span></div>
+          <p class="pricing-desc">Full-scale distribution for creators who want maximum reach.</p>
+          <ul class="pricing-features">
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> 25 fan pages per platform</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> 75 total social accounts</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> 10 reels/page/week</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> Instagram, YouTube, Facebook</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> Priority editing pipeline</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> Dedicated account manager</li>
+            <li><span class="check" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span> Custom analytics dashboard</li>
+          </ul>
+          <a href="#contact" class="pricing-btn outline" data-plan="Premium" data-intake-tab="creator">Choose Premium</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Distribution Section -->
+    <section class="distribution-section band" id="distribution">
+      <div class="section">
+        <div class="dist-top">
+          <div>
+            <h2 class="section-title">Your content, everywhere.</h2>
+            <p class="section-subtitle">One video becomes dozens of placements across the three biggest short-form platforms
+              in India.</p>
+          </div>
+          <div class="dist-scale-strip">
+            <div>
+              <div class="dist-stat-value counter-value" data-target="250">250</div>
+              <div class="dist-stat-label">Max placements per week</div>
+            </div>
+            <div>
+              <div class="dist-stat-value counter-value" data-target="1000">1,000</div>
+              <div class="dist-stat-label">Max placements per month</div>
+            </div>
+            <div>
+              <div class="dist-stat-value counter-value" data-target="75">75</div>
+              <div class="dist-stat-label">Max active accounts</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dist-lanes">
+          <div class="dist-lane dist-lane-odd parallax-vp">
+            <div class="dist-platform-icon" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="5" />
+                <circle cx="12" cy="12" r="4" />
+                <circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none" />
+              </svg>
+            </div>
+            <div class="dist-platform-name">Instagram Reels</div>
+            <div class="dist-platform-type">Up to 25 Fan Pages</div>
+          </div>
+
+          <div class="dist-lane dist-lane-even parallax-vp">
+            <div class="dist-platform-icon" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2.5" y="5" width="19" height="14" rx="4" />
+                <path d="m10 9.2 5.2 2.8-5.2 2.8V9.2Z" />
+              </svg>
+            </div>
+            <div class="dist-platform-name">YouTube Shorts</div>
+            <div class="dist-platform-type">Up to 25 Channels</div>
+          </div>
+
+          <div class="dist-lane dist-lane-odd parallax-vp">
+            <div class="dist-platform-icon" aria-hidden="true">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="3" width="18" height="18" rx="4" />
+                <path d="M14.5 7.5H13a2.5 2.5 0 0 0-2.5 2.5v11M8.5 13h5.5" />
+              </svg>
+            </div>
+            <div class="dist-platform-name">Facebook Reels</div>
+            <div class="dist-platform-type">Up to 25 Pages</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Clippers Section -->
+    <section class="section band clippers-section" id="clippers">
+      <h2 class="section-title">Join the ClipForge network.</h2>
+      <p class="section-subtitle">We're building an open network of skilled content clippers. Own your page, build your
+        brand, earn on every approved video.</p>
+
+      <div class="clippers-content">
+        <ul class="clipper-benefits">
+          <li class="clipper-benefit">
+            <div class="cb-icon" aria-hidden="true">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="m3 10.5 9-7.5 9 7.5" />
+                <path d="M5 9.5V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.5" />
+                <path d="M10 21v-6h4v6" />
+              </svg>
+            </div>
+            <div class="cb-text">
+              <h3>Own your fan page</h3>
+              <p>You create and own the fan page. It's your asset, your audience, your brand to grow alongside your
+                clipping work.</p>
+            </div>
+          </li>
+          <li class="clipper-benefit">
+            <div class="cb-icon" aria-hidden="true">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M9 8h6M9 11.5h6M12.5 8a2.5 2.5 0 0 1 0 5H9.5l4.5 4.5" />
+              </svg>
+            </div>
+            <div class="cb-text">
+              <h3>Earn per approved video</h3>
+              <p>Variable pay for every clip that meets quality standards and gets approved. The more you clip, the more
+                you earn.</p>
+            </div>
+          </li>
+          <li class="clipper-benefit">
+            <div class="cb-icon" aria-hidden="true">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 17 9 11l4 4 8-8" />
+                <path d="M15 7h6v6" />
+              </svg>
+            </div>
+            <div class="cb-text">
+              <h3>Keep monetization revenue</h3>
+              <p>Any monetization revenue your fan page generates through the platform belongs entirely to you.</p>
+            </div>
+          </li>
+          <li class="clipper-benefit">
+            <div class="cb-icon" aria-hidden="true">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="16" rx="2" />
+                <path d="m8 12 2.5 2.5L16 9" />
+              </svg>
+            </div>
+            <div class="cb-text">
+              <h3>Pick your campaigns</h3>
+              <p>Browse available campaigns and claim the ones that match your niche, skills, and interests. Work on your
+                terms.</p>
+            </div>
+          </li>
+          <li class="clipper-benefit">
+            <div class="cb-icon" aria-hidden="true">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+                stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76Z" />
+              </svg>
+            </div>
+            <div class="cb-text">
+              <h3>Tools &amp; support</h3>
+              <p>Access AI-assisted editing tools, style guides, and community support to help you produce better clips
+                faster.</p>
+            </div>
+          </li>
+        </ul>
+
+        <div class="clipper-cta-card wipe-card">
+          <h3>Ready to start clipping?</h3>
+          <p>Join our growing network of independent clippers. No upfront cost. Build your fan pages, pick campaigns, and
+            earn for every approved clip you deliver.</p>
+          <span class="magnetic-wrap">
+            <a href="#contact" class="btn-primary" data-intake-tab="clipper">
+              Apply as a Clipper
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </a>
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Proof Section -->
+    <section class="proof-section band" id="proof">
+      <div class="section">
+        <h2 class="section-title">Built for Indian creators.</h2>
+        <p class="section-subtitle">Affordable short-form distribution that was designed specifically for the Indian
+          creator economy.</p>
+
+        <div class="proof-grid">
+          <div class="proof-card proof-step-1 parallax-vp">
+            <p class="proof-quote">"The distribution model is what convinced me. Instead of posting one reel and hoping,
+              my content now goes out through multiple pages simultaneously."</p>
+            <div class="proof-author">
+              <div class="proof-avatar" aria-hidden="true">RK</div>
+              <div>
+                <div class="proof-name">Raj K.</div>
+                <div class="proof-role">Podcaster, 85K subscribers</div>
+              </div>
+            </div>
+          </div>
+          <div class="proof-card proof-step-2 parallax-vp">
+            <p class="proof-quote">"At ₹10,000/month for 30 accounts posting my clips? That's less than what I'd pay one
+              freelancer to edit five reels. The math makes complete sense."</p>
+            <div class="proof-author">
+              <div class="proof-avatar" aria-hidden="true">SP</div>
+              <div>
+                <div class="proof-name">Sneha P.</div>
+                <div class="proof-role">Educator, 200K followers</div>
+              </div>
+            </div>
+          </div>
+          <div class="proof-card proof-step-3 parallax-vp">
+            <p class="proof-quote">"I was spending hours every week repurposing my streams. Now ClipForge handles
+              everything — clipping, editing, posting — and I just focus on creating."</p>
+            <div class="proof-author">
+              <div class="proof-avatar" aria-hidden="true">AV</div>
+              <div>
+                <div class="proof-name">Arjun V.</div>
+                <div class="proof-role">Streamer, 45K followers</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section band faq-section" id="faq">
+      <div class="faq-layout">
+        <div class="faq-sticky">
+          <h2 class="section-title">Common questions.</h2>
+          <p class="section-subtitle">Everything creators and independent clippers ask before starting a distribution campaign.</p>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-1" id="faq-q-1">
+              <span>What kind of content do I need to provide?</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </span>
+            </button>
+            <div class="faq-answer" id="faq-answer-1" role="region" aria-labelledby="faq-q-1">
+              <div class="faq-answer-inner">
+                <p>Any long-form content works — podcast episodes, YouTube videos, live streams, webinars, tutorials,
+                  interviews, or vlogs. We identify the best moments and transform them into short-form clips optimized for
+                  Instagram Reels, YouTube Shorts, and Facebook Reels.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-2" id="faq-q-2">
+              <span>Who owns the fan pages?</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </span>
+            </button>
+            <div class="faq-answer" id="faq-answer-2" role="region" aria-labelledby="faq-q-2">
+              <div class="faq-answer-inner">
+                <p>The fan pages are created and owned by our independent clippers, not by ClipForge or by you. They are
+                  clearly labeled as unofficial fan pages. The agency coordinates the distribution campaign, and clippers
+                  manage the pages they own.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-3" id="faq-q-3">
+              <span>Can I approve content before it's published?</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </span>
+            </button>
+            <div class="faq-answer" id="faq-answer-3" role="region" aria-labelledby="faq-q-3">
+              <div class="faq-answer-inner">
+                <p>Yes — client approval before publication is optional and available on all plans. You can review clips
+                  before they go live, or trust our quality process and let content publish automatically.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-4" id="faq-q-4">
+              <span>Are the same clips posted across all pages?</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </span>
+            </button>
+            <div class="faq-answer" id="faq-answer-4" role="region" aria-labelledby="faq-q-4">
+              <div class="faq-answer-inner">
+                <p>The same reel may be distributed across multiple pages and platforms — that's part of the distribution
+                  strategy. You control which platforms and pages receive your content. This maximizes reach without requiring
+                  a unique video for every placement.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-5" id="faq-q-5">
+              <span>What platforms do you cover?</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </span>
+            </button>
+            <div class="faq-answer" id="faq-answer-5" role="region" aria-labelledby="faq-q-5">
+              <div class="faq-answer-inner">
+                <p>Currently, we distribute across Instagram Reels, YouTube Shorts, and Facebook Reels — the three largest
+                  short-form video platforms with strong Indian audiences.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-6" id="faq-q-6">
+              <span>How do I become a clipper?</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </span>
+            </button>
+            <div class="faq-answer" id="faq-answer-6" role="region" aria-labelledby="faq-q-6">
+              <div class="faq-answer-inner">
+                <p>Our clipper network is open — independent editors can apply to join. You'll own your fan pages, claim
+                  available campaigns, and earn variable pay for every approved clip. You also retain any platform
+                  monetization revenue from your pages.</p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-question" type="button" aria-expanded="false" aria-controls="faq-answer-7" id="faq-q-7">
+              <span>What makes ClipForge different from a regular editing agency?</span>
+              <span class="faq-icon" aria-hidden="true">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                  stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 5v14M5 12h14" />
+                </svg>
+              </span>
+            </button>
+            <div class="faq-answer" id="faq-answer-7" role="region" aria-labelledby="faq-q-7">
+              <div class="faq-answer-inner">
+                <p>Most agencies just edit. We handle the entire distribution pipeline — from finding moments to publishing
+                  across a network of fan pages. It's editing + distribution + analytics in one affordable package designed
+                  for Indian creators.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA / Intake Section -->
+    <section class="cta-section band" id="contact">
+      <div class="section cta-layout">
+        <div>
+          <h2 class="section-title">Ready to scale your<br>content distribution?</h2>
+          <p class="cta-desc">Join the creators who are multiplying their reach through ClipForge's fan-page distribution
+            network. Plans start at ₹7,000/month.</p>
+          <div class="cta-direct">
+            <span>Direct email:</span>
+            <a href="mailto:hello@clipforge.in">hello@clipforge.in</a>
+          </div>
+        </div>
+
+        <div class="intake-card">
+          <div class="intake-tabs" data-active="creator" role="tablist" aria-label="Choose inquiry type">
+            <span class="intake-tab-indicator" aria-hidden="true"></span>
+            <button class="intake-tab" type="button" role="tab" id="tabCreator" aria-selected="true"
+              aria-controls="panelCreator">Start Your Campaign</button>
+            <button class="intake-tab" type="button" role="tab" id="tabClipper" aria-selected="false"
+              aria-controls="panelClipper">Apply as a Clipper</button>
+          </div>
+
+          <div class="intake-panel-stage">
+            <form class="intake-panel" id="panelCreator" role="tabpanel" aria-labelledby="tabCreator" novalidate>
+              <div class="field-group">
+                <span class="field-label" id="planGroupLabel">Selected plan</span>
+                <div class="plan-pills" role="group" aria-labelledby="planGroupLabel">
+                  <button class="plan-pill" type="button" data-plan-option="Basic" aria-pressed="false">Basic · ₹7,000</button>
+                  <button class="plan-pill" type="button" data-plan-option="Growth" aria-pressed="true">Growth · ₹10,000</button>
+                  <button class="plan-pill" type="button" data-plan-option="Premium" aria-pressed="false">Premium · ₹20,000</button>
+                </div>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="creatorName">Your name or channel</label>
+                <input class="intake-input" id="creatorName" name="creatorName" type="text"
+                  placeholder="e.g. Raj Kapoor / The Deep Dive Podcast" autocomplete="name" required>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="creatorLink">Long-form channel or sample video link</label>
+                <input class="intake-input" id="creatorLink" name="creatorLink" type="url"
+                  placeholder="https://youtube.com/@yourchannel" required>
+              </div>
+              <div class="intake-actions">
+                <button class="btn-primary" type="submit">
+                  Send via Email
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </button>
+                <button class="btn-ghost-dark" type="button" id="copyCreatorBtn">Copy Brief</button>
+              </div>
+              <p class="intake-feedback" id="creatorFeedback" role="status" aria-live="polite"></p>
+            </form>
+
+            <form class="intake-panel" id="panelClipper" role="tabpanel" aria-labelledby="tabClipper" hidden novalidate>
+              <div class="field-group">
+                <label class="field-label" for="clipperPlatform">Primary platform</label>
+                <select class="intake-select" id="clipperPlatform" name="clipperPlatform">
+                  <option value="Instagram Reels">Instagram Reels</option>
+                  <option value="YouTube Shorts">YouTube Shorts</option>
+                  <option value="Facebook Reels">Facebook Reels</option>
+                  <option value="Instagram, YouTube & Facebook">Instagram, YouTube &amp; Facebook</option>
+                </select>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="clipperName">Your name or handle</label>
+                <input class="intake-input" id="clipperName" name="clipperName" type="text"
+                  placeholder="e.g. Rohan / @rohanclips" autocomplete="name" required>
+              </div>
+              <div class="field-group">
+                <label class="field-label" for="clipperLink">Fan page or sample edit link</label>
+                <input class="intake-input" id="clipperLink" name="clipperLink" type="url"
+                  placeholder="https://instagram.com/yourfanpage" required>
+              </div>
+              <div class="intake-actions">
+                <button class="btn-primary" type="submit">
+                  Apply via Email
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25"
+                    stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </button>
+                <button class="btn-ghost-dark" type="button" id="copyClipperBtn">Copy Application</button>
+              </div>
+              <p class="intake-feedback" id="clipperFeedback" role="status" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-brand">
+        <a href="#hero" class="nav-logo">
+          <span class="logo-mark" aria-hidden="true">CF</span>
+          <span>ClipForge</span>
+        </a>
+        <p>India's affordable short-form content distribution agency. We turn your best moments into a multi-platform
+          distribution machine.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="#services">Services</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="footer-col">
+        <h4>For Creators</h4>
+        <a href="#pricing">View Plans</a>
+        <a href="#distribution">Distribution</a>
+        <a href="#contact" data-intake-tab="creator">Get Started</a>
+      </div>
+      <div class="footer-col">
+        <h4>For Clippers</h4>
+        <a href="#clippers">Join Network</a>
+        <a href="#contact" data-intake-tab="clipper">Apply Now</a>
+        <a href="#faq">Clipper FAQ</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 ClipForge. All rights reserved.</p>
+      <a href="mailto:hello@clipforge.in">hello@clipforge.in</a>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      const isReducedMotion = () => reducedMotionQuery.matches;
+      const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+      const supportsNativeScrollTimeline = typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('animation-timeline: scroll()');
+
+      // 1. WebGL2 GLSL Cinema Ember Field Shader (offscreen-paused + reduced-motion safe + CSS radial fallback)
+      const heroEl = document.getElementById('hero');
+      const heroCanvas = document.getElementById('heroShaderCanvas');
+      let heroVisible = true;
+      let shaderRunning = false;
+      let shaderRafId = null;
+
+      function initHeroShader() {
+        if (!heroCanvas || isReducedMotion()) return null;
+        const gl = heroCanvas.getContext('webgl2', { alpha: true, antialias: false, powerPreference: 'low-power' });
+        if (!gl) return null;
+
+        const vsSource = `#version 300 es
+          in vec2 a_pos;
+          void main() { gl_Position = vec4(a_pos, 0.0, 1.0); }`;
+
+        const fsSource = `#version 300 es
+          precision mediump float;
+          out vec4 outColor;
+          uniform vec2 u_res;
+          uniform float u_time;
+          uniform vec2 u_mouse;
+          uniform float u_scroll;
+
+          float wave(vec2 p, float t) {
+            return sin(p.x * 2.6 + t * 0.7 + sin(p.y * 2.1 - t * 0.4)) * 0.5
+                 + cos(p.y * 3.1 - t * 0.55 + cos(p.x * 1.9 + t * 0.35)) * 0.5;
+          }
+
+          void main() {
+            vec2 uv = gl_FragCoord.xy / u_res.xy;
+            vec2 aspect = vec2(u_res.x / max(1.0, u_res.y), 1.0);
+            vec2 p = (uv - 0.5) * aspect * 2.0;
+
+            vec2 m = (u_mouse - 0.5) * aspect * 2.0;
+            float mDist = length(p - m);
+            float mouseGlow = exp(-mDist * 2.2) * 0.38;
+
+            p.y += u_scroll * 0.65;
+            float n1 = wave(p * 1.15, u_time);
+            float n2 = wave(p * 2.1 + n1 * 0.55, u_time * 0.8 + 2.4);
+            float ridge = smoothstep(0.18, 0.92, abs(n1 + n2 * 0.6));
+
+            vec3 base = vec3(0.039, 0.039, 0.047);
+            vec3 ember = vec3(0.86, 0.25, 0.16);
+            vec3 amber = vec3(0.94, 0.65, 0.04);
+
+            vec3 col = base;
+            col += ember * (ridge * 0.32 + mouseGlow * 0.85);
+            col += amber * smoothstep(0.55, 1.0, ridge + mouseGlow * 0.5) * 0.24;
+
+            float scan = 0.96 + 0.04 * sin(gl_FragCoord.y * 1.5);
+            outColor = vec4(col * scan, 1.0);
+          }`;
+
+        function compile(type, src) {
+          const s = gl.createShader(type);
+          gl.shaderSource(s, src);
+          gl.compileShader(s);
+          if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) {
+            gl.deleteShader(s);
+            return null;
+          }
+          return s;
+        }
+
+        const vs = compile(gl.VERTEX_SHADER, vsSource);
+        const fs = compile(gl.FRAGMENT_SHADER, fsSource);
+        if (!vs || !fs) return null;
+
+        const prog = gl.createProgram();
+        gl.attachShader(prog, vs);
+        gl.attachShader(prog, fs);
+        gl.linkProgram(prog);
+        if (!gl.getProgramParameter(prog, gl.LINK_STATUS)) return null;
+
+        const buf = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
+        const loc = gl.getAttribLocation(prog, 'a_pos');
+        gl.enableVertexAttribArray(loc);
+        gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+        const uRes = gl.getUniformLocation(prog, 'u_res');
+        const uTime = gl.getUniformLocation(prog, 'u_time');
+        const uMouse = gl.getUniformLocation(prog, 'u_mouse');
+        const uScroll = gl.getUniformLocation(prog, 'u_scroll');
+
+        let mouseN = { x: 0.72, y: 0.56, tx: 0.72, ty: 0.56 };
+        let heroScrollN = 0;
+
+        function resizeCanvas() {
+          const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+          const w = Math.max(1, Math.floor(heroCanvas.clientWidth * dpr));
+          const h = Math.max(1, Math.floor(heroCanvas.clientHeight * dpr));
+          if (heroCanvas.width !== w || heroCanvas.height !== h) {
+            heroCanvas.width = w;
+            heroCanvas.height = h;
+            gl.viewport(0, 0, w, h);
+          }
+        }
+        window.addEventListener('resize', resizeCanvas, { passive: true });
+        resizeCanvas();
+
+        if (finePointer) {
+          heroEl.addEventListener('pointermove', (e) => {
+            const r = heroEl.getBoundingClientRect();
+            mouseN.tx = (e.clientX - r.left) / Math.max(1, r.width);
+            mouseN.ty = 1.0 - (e.clientY - r.top) / Math.max(1, r.height);
+          }, { passive: true });
+        }
+
+        function render(now) {
+          if (!heroVisible || document.hidden || isReducedMotion()) {
+            shaderRunning = false;
+            shaderRafId = null;
+            return;
+          }
+          mouseN.x += (mouseN.tx - mouseN.x) * 0.08;
+          mouseN.y += (mouseN.ty - mouseN.y) * 0.08;
+          gl.useProgram(prog);
+          gl.uniform2f(uRes, heroCanvas.width, heroCanvas.height);
+          gl.uniform1f(uTime, now * 0.001);
+          gl.uniform2f(uMouse, mouseN.x, mouseN.y);
+          gl.uniform1f(uScroll, heroScrollN);
+          gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+          shaderRafId = requestAnimationFrame(render);
+        }
+
+        return {
+          start() {
+            if (!shaderRunning && heroVisible && !document.hidden && !isReducedMotion()) {
+              shaderRunning = true;
+              shaderRafId = requestAnimationFrame(render);
+            }
+          },
+          stop() {
+            shaderRunning = false;
+            if (shaderRafId) {
+              cancelAnimationFrame(shaderRafId);
+              shaderRafId = null;
+            }
+          },
+          setScroll(v) {
+            heroScrollN = v;
+          }
+        };
+      }
+
+      const shaderCtrl = initHeroShader();
+      if (shaderCtrl) shaderCtrl.start();
+
+      // 2. Custom Cursor + Magnetic Buttons + 3D Card Specular Tilt
+      const cursorDot = document.getElementById('cursorDot');
+      const cursorRing = document.getElementById('cursorRing');
+      if (finePointer && !isReducedMotion() && cursorDot && cursorRing) {
+        let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0, rafId = null, hasMoved = false;
+
+        function animateCursor() {
+          if (isReducedMotion()) {
+            document.body.classList.remove('cursor-visible');
+            rafId = null;
+            return;
+          }
+          ringX += (mouseX - ringX) * 0.2;
+          ringY += (mouseY - ringY) * 0.2;
+          cursorRing.style.transform = `translate3d(${ringX - 18}px, ${ringY - 18}px, 0)`;
+          if (Math.abs(mouseX - ringX) > 0.25 || Math.abs(mouseY - ringY) > 0.25) {
+            rafId = requestAnimationFrame(animateCursor);
+          } else {
+            ringX = mouseX; ringY = mouseY;
+            cursorRing.style.transform = `translate3d(${ringX - 18}px, ${ringY - 18}px, 0)`;
+            rafId = null;
+          }
+        }
+
+        document.addEventListener('pointermove', (e) => {
+          if (e.pointerType !== 'mouse' || isReducedMotion()) return;
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+          if (!hasMoved) {
+            hasMoved = true;
+            ringX = mouseX; ringY = mouseY;
+            document.body.classList.add('cursor-visible');
+          }
+          cursorDot.style.transform = `translate3d(${mouseX - 3.5}px, ${mouseY - 3.5}px, 0)`;
+          if (!rafId) rafId = requestAnimationFrame(animateCursor);
+        }, { passive: true });
+
+        document.addEventListener('mouseleave', () => document.body.classList.remove('cursor-visible'));
+        document.addEventListener('mouseenter', () => {
+          if (hasMoved && !isReducedMotion()) document.body.classList.add('cursor-visible');
+        });
+
+        document.querySelectorAll('a, button, input, select, .pillar-card, .pricing-card, .problem-plank, .proof-card').forEach(el => {
+          el.addEventListener('mouseenter', () => cursorRing.classList.add('hovering'));
+          el.addEventListener('mouseleave', () => cursorRing.classList.remove('hovering'));
+        });
+
+        // Magnetic CTAs
+        document.querySelectorAll('.magnetic-wrap').forEach(wrap => {
+          wrap.addEventListener('pointermove', (e) => {
+            if (isReducedMotion()) return;
+            const r = wrap.getBoundingClientRect();
+            const dx = (e.clientX - (r.left + r.width / 2)) * 0.22;
+            const dy = (e.clientY - (r.top + r.height / 2)) * 0.28;
+            wrap.style.transform = `translate3d(${dx.toFixed(1)}px, ${dy.toFixed(1)}px, 0)`;
+          });
+          wrap.addEventListener('pointerleave', () => {
+            wrap.style.transform = '';
+          });
+        });
+
+        // 3D Tilt + Specular Light Cards
+        document.querySelectorAll('.tilt-card').forEach(card => {
+          card.addEventListener('pointermove', (e) => {
+            if (isReducedMotion() || window.innerWidth < 960) return;
+            const r = card.getBoundingClientRect();
+            const px = (e.clientX - r.left) / Math.max(1, r.width);
+            const py = (e.clientY - r.top) / Math.max(1, r.height);
+            card.style.setProperty('--mx', `${(px * 100).toFixed(1)}%`);
+            card.style.setProperty('--my', `${(py * 100).toFixed(1)}%`);
+            card.style.setProperty('--tilt-x', `${((0.5 - py) * 5).toFixed(2)}deg`);
+            card.style.setProperty('--tilt-y', `${((px - 0.5) * 6).toFixed(2)}deg`);
+          });
+          card.addEventListener('pointerleave', () => {
+            card.style.setProperty('--tilt-x', '0deg');
+            card.style.setProperty('--tilt-y', '0deg');
+          });
+        });
+      }
+
+      // 3. Offscreen & Hidden Tab Pausing
+      if ('IntersectionObserver' in window && heroEl) {
+        const heroObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            heroVisible = entry.isIntersecting;
+            heroEl.classList.toggle('is-offscreen', !heroVisible);
+            if (shaderCtrl) heroVisible ? shaderCtrl.start() : shaderCtrl.stop();
+          });
+        }, { threshold: 0.02 });
+        heroObserver.observe(heroEl);
+      }
+
+      function syncTabVisibility() {
+        document.body.classList.toggle('is-tab-hidden', document.hidden);
+        if (shaderCtrl) (!document.hidden && heroVisible) ? shaderCtrl.start() : shaderCtrl.stop();
+      }
+      document.addEventListener('visibilitychange', syncTabVisibility);
+      syncTabVisibility();
+
+      // 4. Cutting-Room Stage Logic (310vh Scrubbing + View Transitions Clicks)
+      const stageMeta = {
+        1: { label: 'Stage 01 · Intake & Scan', time: '00:08 · STAGE 01' },
+        2: { label: 'Stage 02 · Edit Pipeline', time: '00:34 · STAGE 02' },
+        3: { label: 'Stage 03 · Fan Distribution', time: '01:18 · STAGE 03' },
+        4: { label: 'Stage 04 · Scale & Reports', time: '02:45 · STAGE 04' }
+      };
+      const howRunway = document.getElementById('howRunway');
+      const howStepsContainer = document.getElementById('howSteps');
+      const howSteps = howStepsContainer ? Array.from(howStepsContainer.querySelectorAll('.how-step')) : [];
+      const cuttingMonitor = document.getElementById('cuttingMonitor');
+      const monitorStageLabel = document.getElementById('monitorStageLabel');
+      const monitorStageCounter = document.getElementById('monitorStageCounter');
+      const howTimecode = document.getElementById('howTimecode');
+      const jumpButtons = Array.from(document.querySelectorAll('[data-jump-stage]'));
+      let activeStage = 1;
+      let userLockedStage = false;
+      let stageUnlockTimer = null;
+
+      function applyCuttingStage(stageNum, options = {}) {
+        const next = Math.min(4, Math.max(1, stageNum));
+        if (next === activeStage && !options.force) return;
+
+        const commit = () => {
+          activeStage = next;
+          if (cuttingMonitor) cuttingMonitor.dataset.stage = String(next);
+          if (monitorStageLabel) monitorStageLabel.textContent = stageMeta[next].label;
+          if (monitorStageCounter) monitorStageCounter.textContent = `0${next} / 04`;
+          if (howTimecode) howTimecode.textContent = stageMeta[next].time;
+
+          howSteps.forEach((step, idx) => {
+            const num = idx + 1;
+            step.classList.toggle('is-active', num <= next);
+            step.classList.toggle('is-current', num === next);
+            const btn = step.querySelector('.how-step-trigger');
+            if (btn) btn.setAttribute('aria-pressed', String(num === next));
+          });
+
+          jumpButtons.forEach(btn => {
+            const matches = parseInt(btn.dataset.jumpStage, 10) === next;
+            btn.setAttribute('aria-current', matches ? 'step' : 'false');
+          });
+        };
+
+        if (options.useViewTransition && typeof document.startViewTransition === 'function' && !isReducedMotion()) {
+          try {
+            document.startViewTransition(commit);
+          } catch {
+            commit();
+          }
+        } else {
+          commit();
+        }
+      }
+
+      function jumpToStage(targetStage) {
+        userLockedStage = true;
+        clearTimeout(stageUnlockTimer);
+        stageUnlockTimer = setTimeout(() => { userLockedStage = false; }, 1100);
+        applyCuttingStage(targetStage, { useViewTransition: true });
+
+        const targetLocal = targetStage / 4;
+        if (howStepsContainer) howStepsContainer.style.setProperty('--scrub-p', String(targetLocal));
+        if (cuttingMonitor) {
+          cuttingMonitor.style.setProperty('--scrub-p', String(targetLocal));
+          cuttingMonitor.style.setProperty('--scene-p', '0.85');
+        }
+
+        if (howRunway && window.innerWidth >= 960 && !isReducedMotion()) {
+          const rect = howRunway.getBoundingClientRect();
+          const runwayTop = window.scrollY + rect.top;
+          const scrollable = Math.max(1, howRunway.offsetHeight - window.innerHeight);
+          const stageAnchor = Math.min(0.95, Math.max(0.02, ((targetStage - 0.65) / 4)));
+          window.scrollTo({ top: runwayTop + scrollable * stageAnchor, behavior: 'smooth' });
+        }
+      }
+
+      howSteps.forEach(step => {
+        const trigger = step.querySelector('.how-step-trigger');
+        if (trigger) {
+          trigger.addEventListener('click', () => {
+            jumpToStage(parseInt(step.dataset.step, 10) || 1);
+          });
+        }
+      });
+
+      jumpButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          jumpToStage(parseInt(btn.dataset.jumpStage, 10) || 1);
+        });
+      });
+
+      // 5. Unified Scroll & Velocity Engine (Parallax + Scrubbing + Kinetic Skew)
+      const nav = document.getElementById('mainNav');
+      const scrollProgress = document.getElementById('scrollProgress');
+      const cuttingStageEl = document.querySelector('.cutting-stage');
+      const kineticBandEl = document.querySelector('.kinetic-band');
+      const parallaxVpItems = Array.from(document.querySelectorAll('.parallax-vp'));
+
+      let lastScrollY = window.scrollY;
+      let scrollVel = 0;
+      let scrollTicking = false;
+      let velDecayRaf = null;
+
+      function decayVelocity() {
+        scrollVel *= 0.84;
+        if (Math.abs(scrollVel) < 0.01) {
+          scrollVel = 0;
+          if (kineticBandEl) kineticBandEl.style.setProperty('--scroll-vel', '0');
+          velDecayRaf = null;
+          return;
+        }
+        if (kineticBandEl) kineticBandEl.style.setProperty('--scroll-vel', scrollVel.toFixed(3));
+        velDecayRaf = requestAnimationFrame(decayVelocity);
+      }
+
+      function updateOnScroll() {
+        const scrollTop = window.scrollY;
+        const delta = scrollTop - lastScrollY;
+        lastScrollY = scrollTop;
+        const reduced = isReducedMotion();
+
+        nav.classList.toggle('scrolled', scrollTop > 40);
+
+        if (!supportsNativeScrollTimeline) {
+          const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+          const progress = docHeight > 0 ? Math.min(1, Math.max(0, scrollTop / docHeight)) : 0;
+          scrollProgress.style.transform = `scaleX(${progress})`;
+        }
+
+        if (!reduced) {
+          const clampedDelta = Math.max(-1.6, Math.min(1.6, delta / 45));
+          scrollVel = Math.max(-1.6, Math.min(1.6, scrollVel * 0.55 + clampedDelta * 0.45));
+          if (kineticBandEl) {
+            kineticBandEl.style.setProperty('--scroll-vel', scrollVel.toFixed(3));
+            if (!velDecayRaf && Math.abs(scrollVel) >= 0.01) {
+              velDecayRaf = requestAnimationFrame(decayVelocity);
+            }
+          }
+        }
+
+        const heroH = Math.max(360, heroEl ? heroEl.offsetHeight : 820);
+        const heroP = reduced ? 0 : Math.min(1.35, Math.max(0, scrollTop / (heroH * 0.85)));
+        if (heroEl) heroEl.style.setProperty('--hero-p', heroP.toFixed(3));
+        if (shaderCtrl) shaderCtrl.setScroll(heroP);
+
+        const vh = window.innerHeight || 900;
+        if (kineticBandEl && !reduced) {
+          const rect = kineticBandEl.getBoundingClientRect();
+          const p = Math.min(1, Math.max(0, (vh - rect.top) / Math.max(1, vh + rect.height)));
+          kineticBandEl.style.setProperty('--band-p', p.toFixed(3));
+        }
+
+        if (!reduced) {
+          parallaxVpItems.forEach(el => {
+            const r = el.getBoundingClientRect();
+            const p = Math.min(1, Math.max(0, (vh - r.top) / Math.max(1, vh + r.height)));
+            el.style.setProperty('--vp-p', p.toFixed(3));
+          });
+        }
+
+        if (howRunway && howStepsContainer && cuttingMonitor) {
+          if (reduced) {
+            howStepsContainer.style.setProperty('--scrub-p', '1');
+            cuttingMonitor.style.setProperty('--scrub-p', '1');
+            cuttingMonitor.style.setProperty('--scene-p', '1');
+          } else if (!userLockedStage) {
+            if (window.innerWidth >= 960) {
+              const rect = howRunway.getBoundingClientRect();
+              const scrollable = Math.max(1, howRunway.offsetHeight - vh);
+              const rawP = Math.min(1, Math.max(0, -rect.top / scrollable));
+              howStepsContainer.style.setProperty('--scrub-p', Math.max(0.08, rawP).toFixed(3));
+              cuttingMonitor.style.setProperty('--scrub-p', Math.max(0.08, rawP).toFixed(3));
+              cuttingMonitor.style.setProperty('--stage-local-p', rawP.toFixed(3));
+
+              const stageIdx = Math.min(4, Math.max(1, Math.floor(rawP * 4) + 1));
+              const sceneLocal = Math.min(1, Math.max(0.08, (rawP * 4) - (stageIdx - 1)));
+              cuttingMonitor.style.setProperty('--scene-p', sceneLocal.toFixed(3));
+              applyCuttingStage(stageIdx, { useViewTransition: false });
+            } else {
+              const rect = howStepsContainer.getBoundingClientRect();
+              const anchor = vh * 0.56;
+              const raw = Math.min(1, Math.max(0.25, (anchor - rect.top) / Math.max(1, rect.height)));
+              howStepsContainer.style.setProperty('--scrub-p', raw.toFixed(3));
+              cuttingMonitor.style.setProperty('--scrub-p', raw.toFixed(3));
+              cuttingMonitor.style.setProperty('--scene-p', '0.85');
+
+              let currentIdx = 1;
+              howSteps.forEach((step, idx) => {
+                if (step.getBoundingClientRect().top <= anchor) currentIdx = idx + 1;
+              });
+              applyCuttingStage(currentIdx, { useViewTransition: false });
+            }
+          }
+        }
+
+        scrollTicking = false;
+      }
+
+      window.addEventListener('scroll', () => {
+        if (!scrollTicking) {
+          scrollTicking = true;
+          requestAnimationFrame(updateOnScroll);
+        }
+      }, { passive: true });
+      updateOnScroll();
+
+      // 6. Mobile Menu
+      const hamburger = document.getElementById('hamburger');
+      const mobileMenu = document.getElementById('mobileMenu');
+      const mobileLinks = Array.from(mobileMenu.querySelectorAll('.mobile-link'));
+
+      function setMobileMenu(open) {
+        hamburger.classList.toggle('active', open);
+        mobileMenu.classList.toggle('active', open);
+        hamburger.setAttribute('aria-expanded', String(open));
+        hamburger.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+        mobileMenu.setAttribute('aria-hidden', String(!open));
+        document.body.style.overflow = open ? 'hidden' : '';
+        mobileLinks.forEach(link => link.setAttribute('tabindex', open ? '0' : '-1'));
+        if (open && mobileLinks.length) mobileLinks[0].focus();
+      }
+
+      hamburger.addEventListener('click', () => setMobileMenu(!mobileMenu.classList.contains('active')));
+      mobileLinks.forEach(link => link.addEventListener('click', () => setMobileMenu(false)));
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+          setMobileMenu(false);
+          hamburger.focus();
+        }
+      });
+
+      // 7. Number Count-Up
+      const counters = Array.from(document.querySelectorAll('.counter-value'));
+      if (!isReducedMotion() && 'IntersectionObserver' in window) {
+        const counterObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (!entry.isIntersecting) return;
+            const el = entry.target;
+            const target = parseInt(el.dataset.target, 10);
+            if (!target) return;
+            counterObserver.unobserve(el);
+            const duration = 820;
+            const startTime = performance.now();
+            function tick(now) {
+              if (isReducedMotion()) {
+                el.textContent = target.toLocaleString('en-US');
+                return;
+              }
+              const t = Math.min(1, (now - startTime) / duration);
+              const eased = 1 - Math.pow(1 - t, 3);
+              el.textContent = Math.round(eased * target).toLocaleString('en-US');
+              if (t < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+          });
+        }, { threshold: 0.45 });
+        counters.forEach(el => counterObserver.observe(el));
+      }
+
+      // 8. FAQ Accordion
+      const faqButtons = Array.from(document.querySelectorAll('.faq-question'));
+      faqButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const item = btn.closest('.faq-item');
+          const willOpen = !item.classList.contains('active');
+          faqButtons.forEach(otherBtn => {
+            otherBtn.setAttribute('aria-expanded', 'false');
+            otherBtn.closest('.faq-item').classList.remove('active');
+          });
+          if (willOpen) {
+            item.classList.add('active');
+            btn.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
+
+      // 9. Contact Intake: View Transitions Tab Morph + WAAPI Pulse + Copy Fallback
+      const intakeCard = document.querySelector('.intake-card');
+      const intakeTabs = document.querySelector('.intake-tabs');
+      const tabCreator = document.getElementById('tabCreator');
+      const tabClipper = document.getElementById('tabClipper');
+      const panelCreator = document.getElementById('panelCreator');
+      const panelClipper = document.getElementById('panelClipper');
+      const planButtons = Array.from(document.querySelectorAll('.plan-pill'));
+      let selectedPlan = 'Growth';
+      let intakePulseAnim = null;
+      let tabSwitchTimer = null;
+
+      function setIntakeTab(tabName) {
+        const isCreator = tabName !== 'clipper';
+        const nextActive = isCreator ? 'creator' : 'clipper';
+        const prevActive = intakeTabs ? intakeTabs.dataset.active : nextActive;
+
+        const swapDOM = () => {
+          if (intakeTabs && prevActive !== nextActive && !isReducedMotion()) {
+            clearTimeout(tabSwitchTimer);
+            intakeTabs.classList.add('is-switching');
+            void intakeTabs.offsetWidth;
+            tabSwitchTimer = setTimeout(() => {
+              intakeTabs.classList.remove('is-switching');
+            }, 290);
+          }
+          if (intakeTabs) intakeTabs.dataset.active = nextActive;
+          tabCreator.setAttribute('aria-selected', String(isCreator));
+          tabClipper.setAttribute('aria-selected', String(!isCreator));
+          panelCreator.hidden = !isCreator;
+          panelClipper.hidden = isCreator;
+        };
+
+        if (prevActive !== nextActive && typeof document.startViewTransition === 'function' && !isReducedMotion()) {
+          try {
+            document.startViewTransition(swapDOM);
+          } catch {
+            swapDOM();
+          }
+        } else {
+          swapDOM();
+        }
+      }
+
+      function setPlan(planName) {
+        selectedPlan = planName;
+        planButtons.forEach(btn => {
+          btn.setAttribute('aria-pressed', String(btn.dataset.planOption === planName));
+        });
+      }
+
+      function pulseIntakeCard() {
+        if (!intakeCard || typeof intakeCard.animate !== 'function') return;
+        if (intakePulseAnim) intakePulseAnim.cancel();
+        const reduced = isReducedMotion();
+        intakePulseAnim = intakeCard.animate(
+          reduced
+            ? [
+                { borderColor: 'rgba(245, 240, 235, 0.14)' },
+                { borderColor: '#f0a500' },
+                { borderColor: 'rgba(245, 240, 235, 0.14)' }
+              ]
+            : [
+                { borderColor: 'rgba(245, 240, 235, 0.14)', boxShadow: '0 0 0 0 rgba(240, 165, 0, 0)' },
+                { borderColor: '#f0a500', boxShadow: '0 0 0 3px rgba(240, 165, 0, 0.28)' },
+                { borderColor: 'rgba(245, 240, 235, 0.14)', boxShadow: '0 0 0 0 rgba(240, 165, 0, 0)' }
+              ],
+          {
+            duration: reduced ? 260 : 540,
+            delay: reduced ? 0 : 120,
+            easing: 'cubic-bezier(0.16, 1, 0.3, 1)'
+          }
+        );
+      }
+
+      tabCreator.addEventListener('click', () => setIntakeTab('creator'));
+      tabClipper.addEventListener('click', () => setIntakeTab('clipper'));
+
+      [tabCreator, tabClipper].forEach(tab => {
+        tab.addEventListener('keydown', (e) => {
+          if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+            e.preventDefault();
+            const next = tab === tabCreator ? tabClipper : tabCreator;
+            setIntakeTab(next === tabClipper ? 'clipper' : 'creator');
+            next.focus();
+          }
+        });
+      });
+
+      planButtons.forEach(btn => btn.addEventListener('click', () => setPlan(btn.dataset.planOption)));
+
+      document.querySelectorAll('[data-intake-tab], [data-plan]').forEach(trigger => {
+        trigger.addEventListener('click', () => {
+          const targetTab = trigger.dataset.intakeTab || 'creator';
+          setIntakeTab(targetTab);
+          if (trigger.dataset.plan) setPlan(trigger.dataset.plan);
+          pulseIntakeCard();
+        });
+      });
+
+      function setFeedback(el, message, type) {
+        el.textContent = message;
+        el.className = `intake-feedback ${type ? `is-${type}` : ''}`;
+      }
+
+      function validateField(input) {
+        const value = input.value.trim();
+        const valid = value.length > 0;
+        input.setAttribute('aria-invalid', String(!valid));
+        return valid ? value : '';
+      }
+
+      async function copyText(text) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          try {
+            await navigator.clipboard.writeText(text);
+            return true;
+          } catch {
+            // Fall through to execCommand fallback
+          }
+        }
+        const temp = document.createElement('textarea');
+        temp.value = text;
+        temp.setAttribute('readonly', '');
+        temp.style.position = 'fixed';
+        temp.style.opacity = '0';
+        document.body.appendChild(temp);
+        temp.select();
+        const ok = document.execCommand('copy');
+        document.body.removeChild(temp);
+        if (!ok) throw new Error('Clipboard copy failed');
+        return true;
+      }
+
+      function buildCreatorBrief() {
+        const nameInput = document.getElementById('creatorName');
+        const linkInput = document.getElementById('creatorLink');
+        const feedback = document.getElementById('creatorFeedback');
+        const name = validateField(nameInput);
+        const link = validateField(linkInput);
+
+        if (!name || !link) {
+          setFeedback(feedback, 'Enter your name/channel and a link to your content so we can review it.', 'error');
+          (!name ? nameInput : linkInput).focus();
+          return null;
+        }
+
+        const subject = `ClipForge ${selectedPlan} Plan Inquiry — ${name}`;
+        const body = `Hi ClipForge team,\n\nI'd like to start a campaign on the ${selectedPlan} plan.\n\nName / Channel: ${name}\nContent link: ${link}\n`;
+        return { subject, body, feedback };
+      }
+
+      function buildClipperBrief() {
+        const platformInput = document.getElementById('clipperPlatform');
+        const nameInput = document.getElementById('clipperName');
+        const linkInput = document.getElementById('clipperLink');
+        const feedback = document.getElementById('clipperFeedback');
+        const name = validateField(nameInput);
+        const link = validateField(linkInput);
+
+        if (!name || !link) {
+          setFeedback(feedback, 'Enter your name/handle and a link to a fan page or sample edit.', 'error');
+          (!name ? nameInput : linkInput).focus();
+          return null;
+        }
+
+        const platform = platformInput.value;
+        const subject = `ClipForge Clipper Application — ${name}`;
+        const body = `Hi ClipForge team,\n\nI'd like to join the ClipForge clipper network.\n\nName / Handle: ${name}\nPrimary platform: ${platform}\nFan page / Sample link: ${link}\n`;
+        return { subject, body, feedback };
+      }
+
+      panelCreator.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const brief = buildCreatorBrief();
+        if (!brief) return;
+        setFeedback(brief.feedback, 'Opening your email app addressed to hello@clipforge.in.', 'success');
+        window.location.href = `mailto:hello@clipforge.in?subject=${encodeURIComponent(brief.subject)}&body=${encodeURIComponent(brief.body)}`;
+      });
+
+      document.getElementById('copyCreatorBtn').addEventListener('click', async () => {
+        const brief = buildCreatorBrief();
+        if (!brief) return;
+        try {
+          await copyText(`To: hello@clipforge.in\nSubject: ${brief.subject}\n\n${brief.body}`);
+          setFeedback(brief.feedback, 'Copied brief and hello@clipforge.in to clipboard.', 'success');
+        } catch {
+          setFeedback(brief.feedback, 'Could not access clipboard. Email hello@clipforge.in directly.', 'error');
+        }
+      });
+
+      panelClipper.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const brief = buildClipperBrief();
+        if (!brief) return;
+        setFeedback(brief.feedback, 'Opening your email app addressed to hello@clipforge.in.', 'success');
+        window.location.href = `mailto:hello@clipforge.in?subject=${encodeURIComponent(brief.subject)}&body=${encodeURIComponent(brief.body)}`;
+      });
+
+      document.getElementById('copyClipperBtn').addEventListener('click', async () => {
+        const brief = buildClipperBrief();
+        if (!brief) return;
+        try {
+          await copyText(`To: hello@clipforge.in\nSubject: ${brief.subject}\n\n${brief.body}`);
+          setFeedback(brief.feedback, 'Copied application and hello@clipforge.in to clipboard.', 'success');
+        } catch {
+          setFeedback(brief.feedback, 'Could not access clipboard. Email hello@clipforge.in directly.', 'error');
+        }
+      });
+
+      document.querySelectorAll('.intake-input').forEach(input => {
+        input.addEventListener('input', () => {
+          if (input.getAttribute('aria-invalid') === 'true' && input.value.trim()) {
+            input.setAttribute('aria-invalid', 'false');
+          }
+        });
+      });
+    })();
+  </script>
+</body>
+
+</html>
