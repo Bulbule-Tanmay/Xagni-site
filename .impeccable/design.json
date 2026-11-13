@@ -1,0 +1,121 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-12T20:43:00+05:30",
+  "title": "Design System: Xagni",
+  "extensions": {
+    "colorMeta": {
+      "carbon": { "role": "primary", "displayName": "Carbon", "canonical": "#000000", "tonalRamp": ["#000000", "#1a1a1a", "#333333", "#4d4d4d", "#666666", "#999999", "#cccccc", "#f2f2f2"] },
+      "paper-white": { "role": "neutral", "displayName": "Paper White", "canonical": "#ffffff", "tonalRamp": ["#1f1f1f", "#454545", "#6e6e6e", "#949494", "#bababa", "#d9d9d9", "#ededed", "#ffffff"] },
+      "sky-wash": { "role": "neutral", "displayName": "Sky Wash", "canonical": "#dceeff", "tonalRamp": ["#122436", "#234668", "#35699b", "#508bc4", "#7aadde", "#a6cbef", "#dceeff", "#f0f8ff"] },
+      "concrete-gray": { "role": "neutral", "displayName": "Concrete Gray", "canonical": "#cccccc", "tonalRamp": ["#1f1f1f", "#3d3d3d", "#5c5c5c", "#7a7a7a", "#999999", "#b3b3b3", "#cccccc", "#ebebeb"] },
+      "soft-mist": { "role": "neutral", "displayName": "Soft Mist", "canonical": "#e9e9e9", "tonalRamp": ["#212121", "#424242", "#636363", "#858585", "#a6a6a6", "#c7c7c7", "#e9e9e9", "#f7f7f7"] },
+      "electric-blue": { "role": "primary", "displayName": "Electric Blue", "canonical": "#4da2ff", "tonalRamp": ["#0b2b4d", "#154f8f", "#1f73cf", "#338bf0", "#4da2ff", "#78b8ff", "#a8d2ff", "#dceeff"] },
+      "mint-pop": { "role": "secondary", "displayName": "Mint Pop", "canonical": "#55db9c", "tonalRamp": ["#0c3623", "#186643", "#269663", "#38c283", "#55db9c", "#7ee4b4", "#acefd0", "#dcf9ec"] },
+      "lavender": { "role": "secondary", "displayName": "Lavender", "canonical": "#e9ccff", "tonalRamp": ["#2d1440", "#522575", "#7736aa", "#9d57d4", "#bd87eb", "#d6adfa", "#e9ccff", "#f6ebff"] },
+      "ember": { "role": "secondary", "displayName": "Ember", "canonical": "#fb4903", "tonalRamp": ["#471300", "#822400", "#bd3500", "#fb4903", "#fc6f38", "#fd966e", "#febca3", "#ffe3d8"] },
+      "sunburst": { "role": "secondary", "displayName": "Sunburst", "canonical": "#ffd731", "tonalRamp": ["#473a00", "#806900", "#b89700", "#ebc200", "#ffd731", "#ffe163", "#ffec99", "#fff7d1"] },
+      "voltage-violet": { "role": "secondary", "displayName": "Voltage Violet", "canonical": "#5c4ade", "tonalRamp": ["#161040", "#291e78", "#3d2cb0", "#5c4ade", "#7e6fe5", "#a095ed", "#c5bef5", "#e8e5fc"] }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Hero Display", "purpose": "Crushed 800-weight uppercase poster headline over 3D hero ribbon." },
+      "headline": { "displayName": "Section Poster Headline", "purpose": "Crushed 800-weight section titles across pastel bands." },
+      "title": { "displayName": "Subhead & Card Title", "purpose": "Supporting taglines and sticker card headings." },
+      "body": { "displayName": "Body Copy", "purpose": "Readable descriptions, workflow steps, and FAQ answers." },
+      "label": { "displayName": "Pill & Sticker Label", "purpose": "Tracked uppercase pill nav items, marquee strip, and form labels." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "ease-snap", "value": "cubic-bezier(0.22, 1, 0.36, 1)", "purpose": "Crisp tactile snap on pill buttons, drawer open/close, and FAQ accordions." },
+      { "name": "marquee-loop", "value": "32s linear infinite", "purpose": "Continuous horizontal announcement scroll paused on hover and reduced-motion." }
+    ],
+    "breakpoints": [
+      { "name": "tablet", "value": "1120px" },
+      { "name": "mobile", "value": "720px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Filled CTA",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "High-priority Carbon filled action button shifting to Voltage Violet on hover.",
+      "html": "<a href=\"#contact\" class=\"ds-btn-primary\">Launch Campaign</a>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; background: var(--color-carbon, #000000); color: var(--color-paper-white, #ffffff); border: 1px solid var(--color-carbon, #000000); border-radius: 40px; padding: 12px 18px; font-family: var(--font-aeonik-pro, sans-serif); font-size: 13px; font-weight: 700; letter-spacing: 0.032em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: background-color 0.16s cubic-bezier(0.22, 1, 0.36, 1), transform 0.16s cubic-bezier(0.22, 1, 0.36, 1); } .ds-btn-primary:hover { background: var(--color-voltage-violet, #5c4ade); transform: translateY(-1px); } .ds-btn-primary:focus-visible { outline: 2px solid #000000; outline-offset: 3px; }"
+    },
+    {
+      "name": "Ghost Pill Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Secondary Paper White pill button with 1px Carbon outline and Lavender hover fill.",
+      "html": "<a href=\"#pricing\" class=\"ds-btn-ghost\">View Plans — ₹7,000</a>",
+      "css": ".ds-btn-ghost { display: inline-flex; align-items: center; justify-content: center; background: var(--color-paper-white, #ffffff); color: var(--color-carbon, #000000); border: 1px solid var(--color-carbon, #000000); border-radius: 1600px; padding: 11px 16px; font-family: var(--font-aeonik-pro, sans-serif); font-size: 13px; font-weight: 700; letter-spacing: 0.032em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: background-color 0.16s cubic-bezier(0.22, 1, 0.36, 1), transform 0.16s cubic-bezier(0.22, 1, 0.36, 1); } .ds-btn-ghost:hover { background: var(--color-lavender, #e9ccff); transform: translateY(-1px); } .ds-btn-ghost:focus-visible { outline: 2px solid #000000; outline-offset: 3px; }"
+    },
+    {
+      "name": "Pill Nav Button",
+      "kind": "nav",
+      "refersTo": "pill-nav-btn",
+      "description": "Inline top navigation pill with 1px Carbon border and Lavender hover.",
+      "html": "<a href=\"#pipeline\" class=\"ds-pill-nav\">Pipeline</a>",
+      "css": ".ds-pill-nav { display: inline-flex; align-items: center; justify-content: center; background: var(--color-paper-white, #ffffff); color: var(--color-carbon, #000000); border: 1px solid var(--color-carbon, #000000); border-radius: 1600px; padding: 12px 14px; font-family: var(--font-aeonik-pro, sans-serif); font-size: 12px; font-weight: 700; letter-spacing: 0.032em; text-transform: uppercase; line-height: 1; text-decoration: none; transition: background-color 0.15s ease, transform 0.15s ease; } .ds-pill-nav:hover { background: var(--color-lavender, #e9ccff); transform: translateY(-1px); } .ds-pill-nav:focus-visible { outline: 2px solid #000000; outline-offset: 3px; }"
+    },
+    {
+      "name": "Sticker Tag Badge",
+      "kind": "chip",
+      "description": "Hand-cut rotated sticker badge with 1px Carbon outline and SVG icon.",
+      "html": "<div class=\"ds-sticker\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\"><path d=\"M20 6 9 17l-5-5\"/></svg><span>IG · YT · FB</span></div>",
+      "css": ".ds-sticker { display: inline-flex; align-items: center; gap: 8px; background: var(--color-mint-pop, #55db9c); color: var(--color-carbon, #000000); border: 1px solid var(--color-carbon, #000000); border-radius: 20px; padding: 10px 14px; font-family: var(--font-aeonik-pro, sans-serif); font-size: 12px; font-weight: 700; letter-spacing: 0.032em; text-transform: uppercase; line-height: 1.1; transform: rotate(-5deg); }"
+    },
+    {
+      "name": "QR Brief Split Card",
+      "kind": "custom",
+      "refersTo": "card-qr-brief",
+      "description": "Signature Slush split card pairing a white QR square with a Voltage Violet action panel.",
+      "html": "<div class=\"ds-qr-card\"><div class=\"ds-qr-panel\"><svg width=\"56\" height=\"56\" viewBox=\"0 0 29 29\" fill=\"#000000\"><rect width=\"29\" height=\"29\" fill=\"#ffffff\"/><path d=\"M1 1h7v7H1zM2 2v5h5V2zM21 1h7v7h-7zM1 21h7v7H1zM12 13h5v5h-5z\"/></svg></div><div class=\"ds-qr-body\"><span class=\"ds-qr-title\">DIRECT BRIEF DESK</span><a href=\"#contact\" class=\"ds-qr-link\">OPEN BRIEF FORM →</a></div></div>",
+      "css": ".ds-qr-card { display: inline-flex; align-items: stretch; background: var(--color-voltage-violet, #5c4ade); border: 1px solid var(--color-carbon, #000000); border-radius: 20px; overflow: hidden; } .ds-qr-panel { background: #ffffff; border-right: 1px solid #000000; padding: 10px; display: flex; align-items: center; } .ds-qr-body { padding: 14px 18px; display: flex; flex-direction: column; justify-content: center; gap: 8px; color: #ffffff; } .ds-qr-title { font-size: 13px; font-weight: 700; letter-spacing: 0.032em; text-transform: uppercase; } .ds-qr-link { display: inline-flex; width: fit-content; background: #ffffff; color: #000000; border: 1px solid #000000; border-radius: 1600px; padding: 6px 12px; font-size: 11px; font-weight: 700; letter-spacing: 0.032em; text-decoration: none; }"
+    },
+    {
+      "name": "Sticker Collage Card",
+      "kind": "card",
+      "refersTo": "card-sticker",
+      "description": "Flat 30px-radius card with 1px Carbon outline and bottom category pill.",
+      "html": "<article class=\"ds-collage-card\"><h3>One handle caps discovery</h3><p>Independent fan pages multiply touchpoints simultaneously.</p><span class=\"ds-card-tag\">Zero Cannibalization</span></article>",
+      "css": ".ds-collage-card { background: var(--color-lavender, #e9ccff); color: var(--color-carbon, #000000); border: 1px solid var(--color-carbon, #000000); border-radius: 30px; padding: 24px; display: flex; flex-direction: column; gap: 12px; } .ds-collage-card h3 { font-size: 20px; font-weight: 700; line-height: 1.18; margin: 0; } .ds-collage-card p { font-size: 15px; line-height: 1.45; margin: 0; } .ds-card-tag { display: inline-flex; width: fit-content; background: #ffffff; border: 1px solid #000000; border-radius: 1600px; padding: 5px 10px; font-size: 11px; font-weight: 700; letter-spacing: 0.032em; text-transform: uppercase; }"
+    },
+    {
+      "name": "Intake Input Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Soft 20px-radius input field with 1px Carbon outline and high-contrast focus ring.",
+      "html": "<input class=\"ds-input\" type=\"url\" placeholder=\"https://youtube.com/@yourchannel\">",
+      "css": ".ds-input { width: 100%; background: var(--color-paper-white, #ffffff); border: 1px solid var(--color-carbon, #000000); border-radius: 20px; padding: 13px 16px; font-family: var(--font-aeonik-pro, sans-serif); font-size: 15px; font-weight: 500; color: var(--color-carbon, #000000); } .ds-input:focus { outline: 2px solid #000000; outline-offset: 2px; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Inflatable Sticker Universe on Pastel Paper",
+    "overview": "Xagni presents short-form multi-page distribution as a physical collage of hand-cut stickers, oversized crushed display blocks, and grainy 3D inflatable Electric Blue ribbons pinned across alternating full-bleed pastel bands. Rather than mimicking dark neon video editors or soft gray SaaS dashboards, every surface pairs solid flat color fills with crisp 1px Carbon (#000000) outlines.\n\nAll dimensional weight lives inside the three 3D-rendered matte vinyl ribbons (assets/ribbon-hero.png, assets/ribbon-arc.png, assets/ribbon-loop.png), leaving cards, pills, and stickers completely flat with zero drop shadows and zero gradients.",
+    "keyCharacteristics": [
+      "Full-bleed alternating pastel ground bands (#dceeff → #ffffff → #cccccc) replacing dividers and shadows",
+      "Crushed 800-weight condensed uppercase display blocks (0.78 line-height) layered in front of 3D Electric Blue (#4da2ff) inflatable ribbons",
+      "Universal 1px solid #000000 hand-cut outlines across every button, pill, sticker, input, and card",
+      "Shared six-color sticker palette (#4da2ff, #55db9c, #e9ccff, #fb4903, #ffd731, #5c4ade) applied across every band"
+    ],
+    "rules": [
+      { "name": "The Zero-Blue-Action Rule", "body": "Electric Blue (#4da2ff) is reserved strictly for 3D ribbons and decorative card washes; interactive CTAs use only Carbon (#000000) fills or Paper White (#ffffff) fills with 1px solid #000000 borders.", "section": "colors" },
+      { "name": "The Shared Sticker Set Rule", "body": "Every section pulls from the six-color sticker palette together rather than isolating a single brand accent.", "section": "colors" },
+      { "name": "The Crushed Leading Rule", "body": "Display headlines always sit at 0.75–0.80 line-height so stacked words behave as unified sculptural blocks.", "section": "typography" },
+      { "name": "The Flat-Paper Rule", "body": "Zero box-shadow and zero CSS gradients on every element; only the 3D ribbon assets carry volumetric shading.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do pair Barlow Condensed 800 display text at 0.78 line-height with a 3D Electric Blue (#4da2ff) ribbon behind it in every major section.",
+      "Do keep 1px solid #000000 borders on every button, pill, sticker, input, and card.",
+      "Do alternate full-bleed band backgrounds across #dceeff, #ffffff, and #cccccc without horizontal rules or shadows.",
+      "Do keep all >= 4.5:1 contrast pairings intact (#000000 ink on #fb4903, #4da2ff, #55db9c, #e9ccff; #ffffff ink on #5c4ade and #000000)."
+    ],
+    "donts": [
+      "Don't add box-shadow or CSS gradients to any element.",
+      "Don't use Electric Blue (#4da2ff) as a button or link action color.",
+      "Don't use Sunburst (#ffd731) behind readable text or Mint Pop (#55db9c) as a semantic success state.",
+      "Don't use border-radius below 16px on cards/icons or below 1600px on pill buttons/tags."
+    ]
+  }
+}
